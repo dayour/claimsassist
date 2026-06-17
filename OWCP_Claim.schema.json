@@ -1,0 +1,43 @@
+{
+  "$comment": "Claim_Studio — Dataverse table schema for the Workers' Comp Claims Tracker. Consumed by New-OwcpClaimTable.ps1 to create the table + columns via the Dataverse Web API. Edit values here; the script reads this file.",
+  "publisherPrefix": "owcp",
+  "table": {
+    "schemaName": "owcp_Claim",
+    "logicalName": "owcp_claim",
+    "displayName": "OWCP Claim",
+    "displayCollectionName": "OWCP Claims",
+    "description": "Workers' compensation claim record (Office of Workers' Compensation Programs).",
+    "ownershipType": "UserOwned",
+    "primaryColumn": {
+      "schemaName": "owcp_ClaimNumber",
+      "displayName": "Claim Number",
+      "maxLength": 100,
+      "requiredLevel": "ApplicationRequired",
+      "description": "Unique claim identifier, e.g. OWCP-2026-1001."
+    }
+  },
+  "columns": [
+    { "schemaName": "owcp_Claimant", "displayName": "Claimant", "type": "String", "maxLength": 200, "requiredLevel": "ApplicationRequired", "description": "Full name of the injured employee." },
+    { "schemaName": "owcp_Property", "displayName": "Property", "type": "Choice", "requiredLevel": "ApplicationRequired", "description": "Business property where the incident occurred.",
+      "options": ["Flagship Location", "Flagship Location Tower", "Flagship Location Palace (Macau)", "Flagship Location Boston Harbor"] },
+    { "schemaName": "owcp_Department", "displayName": "Department", "type": "Choice", "requiredLevel": "ApplicationRequired", "description": "Operational department of the claimant.",
+      "options": ["Housekeeping", "Food & Beverage", "Casino Floor", "Facilities / Engineering", "Security", "Hotel Operations", "Culinary", "Valet / Transportation"] },
+    { "schemaName": "owcp_IncidentType", "displayName": "Incident Type", "type": "Choice", "requiredLevel": "None", "description": "Incident category assigned by the classifier.",
+      "options": ["Slip / Trip / Fall", "Lifting / Overexertion", "Repetitive Strain", "Struck By Object", "Equipment / Machinery", "Vehicle / Cart", "Chemical Exposure", "Burn / Heat", "Other"] },
+    { "schemaName": "owcp_BodyPart", "displayName": "Body Part", "type": "String", "maxLength": 100, "requiredLevel": "None", "description": "Body part affected." },
+    { "schemaName": "owcp_Severity", "displayName": "Severity", "type": "Choice", "requiredLevel": "None", "description": "Assessed severity of the injury.",
+      "options": ["Low", "Moderate", "High", "Critical"] },
+    { "schemaName": "owcp_Status", "displayName": "Status", "type": "Choice", "requiredLevel": "ApplicationRequired", "description": "Claim lifecycle status.",
+      "options": ["New", "Under Review", "Classified", "Approved", "Denied", "Closed"] },
+    { "schemaName": "owcp_Adjuster", "displayName": "Adjuster", "type": "Choice", "requiredLevel": "None", "description": "Assigned claims adjuster.",
+      "options": ["Alex Carter", "Cory Lutz", "Keisha James", "Dennis Kim", "Daryl Yourk"] },
+    { "schemaName": "owcp_DateOfInjury", "displayName": "Date of Injury", "type": "DateOnly", "requiredLevel": "ApplicationRequired", "description": "Date the injury occurred." },
+    { "schemaName": "owcp_DateReported", "displayName": "Date Reported", "type": "DateOnly", "requiredLevel": "None", "description": "Date the claim was reported." },
+    { "schemaName": "owcp_ReserveUsd", "displayName": "Reserve (USD)", "type": "Money", "requiredLevel": "None", "minValue": 0, "maxValue": 100000000, "precision": 2, "description": "Financial reserve provisioned for the claim." },
+    { "schemaName": "owcp_Classified", "displayName": "Classified", "type": "Boolean", "requiredLevel": "None", "trueLabel": "Yes", "falseLabel": "No", "defaultValue": false, "description": "Whether the claim has been run through the incident classifier." },
+    { "schemaName": "owcp_ClassifierModel", "displayName": "Classifier Model", "type": "String", "maxLength": 100, "requiredLevel": "None", "description": "Model used by the classifier, e.g. GPT-4.1 mini." },
+    { "schemaName": "owcp_ClassifierConfidence", "displayName": "Classifier Confidence", "type": "Decimal", "requiredLevel": "None", "minValue": 0, "maxValue": 1, "precision": 2, "description": "Classifier confidence score (0–1)." },
+    { "schemaName": "owcp_RecommendedAction", "displayName": "Recommended Action", "type": "Memo", "maxLength": 2000, "requiredLevel": "None", "description": "Recommended next action from the classifier." },
+    { "schemaName": "owcp_Description", "displayName": "Description", "type": "Memo", "maxLength": 4000, "requiredLevel": "None", "description": "Free-text incident narrative." }
+  ]
+}

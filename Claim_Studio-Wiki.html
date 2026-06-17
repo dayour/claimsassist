@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Claim_Studio — Solution Wiki</title>
+<style>
+  :root{
+    --navy:#1f3864; --blue:#2e75b6; --bronze:#9c6b1e; --ink:#1b1f24; --muted:#5b636e;
+    --line:#e3e8ef; --bg:#f5f7fb; --panel:#ffffff; --code:#0d1117; --codeink:#e6edf3;
+    --ok:#1a7f37; --warn:#9a6700; --chip:#eaf1fb;
+    --sev-low:#2f7d32; --sev-mod:#9a6700; --sev-high:#b3471b; --sev-crit:#a31515;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font:15px/1.6 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{display:grid;grid-template-columns:288px 1fr;min-height:100vh}
+  /* Sidebar */
+  nav.side{position:sticky;top:0;align-self:start;height:100vh;overflow:auto;background:linear-gradient(180deg,#16243f,#1f3864);color:#dfe7f5;padding:22px 18px}
+  nav.side .brand{display:flex;align-items:center;gap:11px;margin-bottom:6px}
+  nav.side .logo{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,#2e75b6,#5aa0e0);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:14px;letter-spacing:.5px}
+  nav.side h1{font-size:17px;margin:0;color:#fff}
+  nav.side .sub{font-size:11.5px;color:#9db4d8;letter-spacing:.10em;text-transform:uppercase;margin:2px 0 18px}
+  nav.side a{display:block;color:#cdd9ee;padding:6px 10px;border-radius:7px;font-size:13.5px;margin:1px 0}
+  nav.side a:hover{background:rgba(255,255,255,.08);text-decoration:none;color:#fff}
+  nav.side .grp{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#7f97c0;margin:16px 0 4px 10px}
+  nav.side .meta{margin-top:22px;padding-top:14px;border-top:1px solid rgba(255,255,255,.12);font-size:11.5px;color:#9db4d8;line-height:1.7}
+  /* Content */
+  main{padding:46px 56px;max-width:1040px}
+  .hero{border-bottom:3px solid var(--blue);padding-bottom:22px;margin-bottom:30px}
+  .hero h1{font-size:34px;margin:0 0 6px;color:var(--navy)}
+  .hero .tag{font-size:16px;color:var(--bronze);font-weight:600}
+  .hero p{color:var(--muted);margin:12px 0 0;max-width:760px}
+  .pills{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+  .pill{background:var(--chip);color:var(--navy);border:1px solid #d3e0f3;border-radius:999px;padding:4px 12px;font-size:12.5px;font-weight:600}
+  h2{color:var(--navy);font-size:24px;margin:46px 0 10px;padding-top:8px;border-bottom:1px solid var(--line);padding-bottom:8px}
+  h3{color:var(--blue);font-size:18px;margin:26px 0 8px}
+  h4{color:var(--bronze);font-size:14.5px;margin:18px 0 6px;text-transform:uppercase;letter-spacing:.04em}
+  p{margin:8px 0}
+  ul,ol{margin:8px 0 8px 4px;padding-left:22px}
+  li{margin:4px 0}
+  code{font-family:Consolas,"Cascadia Code",monospace;background:#eef1f6;color:#234;border-radius:4px;padding:1px 6px;font-size:13px}
+  pre{background:var(--code);color:var(--codeink);border-radius:10px;padding:16px 18px;overflow:auto;font-size:13px;line-height:1.55;border:1px solid #20262e}
+  pre code{background:none;color:inherit;padding:0}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13.5px;background:var(--panel);border-radius:10px;overflow:hidden;box-shadow:0 1px 2px rgba(20,40,80,.06)}
+  th{background:var(--navy);color:#fff;text-align:left;padding:9px 12px;font-weight:600}
+  td{padding:8px 12px;border-top:1px solid var(--line);vertical-align:top}
+  tr:nth-child(even) td{background:#f7faff}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0;box-shadow:0 1px 3px rgba(20,40,80,.05)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .note{border-left:4px solid var(--blue);background:#eef5fd;padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0;font-size:13.5px}
+  .note.warn{border-color:var(--warn);background:#fdf6e7}
+  .note.ok{border-color:var(--ok);background:#eaf6ec}
+  .kv{display:grid;grid-template-columns:170px 1fr;gap:4px 14px;font-size:13.5px}
+  .kv .k{color:var(--muted)}
+  .sev{display:inline-block;border-radius:5px;padding:1px 8px;font-size:12px;font-weight:600;color:#fff}
+  .badge{display:inline-block;background:#eef1f6;border:1px solid #dfe4ec;border-radius:6px;padding:1px 8px;font-size:12px;color:#445}
+  footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
+  .steps{counter-reset:s;list-style:none;padding-left:0}
+  .steps>li{counter-increment:s;position:relative;padding:6px 0 6px 40px;margin:8px 0}
+  .steps>li::before{content:counter(s);position:absolute;left:0;top:4px;width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+  @media(max-width:920px){.wrap{grid-template-columns:1fr}nav.side{position:static;height:auto}main{padding:28px}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="side">
+    <div class="brand">
+      <div class="logo">OW</div>
+      <div><h1>Claim_Studio</h1></div>
+    </div>
+    <div class="sub">Solution Wiki</div>
+    <a href="#overview">Overview</a>
+    <a href="#architecture">Architecture</a>
+    <div class="grp">Data</div>
+    <a href="#table">WorkersCompensationCase</a>
+    <a href="#columns">Columns</a>
+    <a href="#choices">Choice option sets</a>
+    <a href="#connectivity">Live data connectivity</a>
+    <div class="grp">Applications</div>
+    <a href="#codeapp">Claim_Studio code app</a>
+    <a href="#dashboard">Dashboard</a>
+    <a href="#claims">Claims</a>
+    <a href="#report">Report Incident</a>
+    <a href="#classifier">Incident Classifier</a>
+    <a href="#mda">Model-driven app</a>
+    <div class="grp">Operations</div>
+    <a href="#solution">Solution & components</a>
+    <a href="#deploy">Deployment guide</a>
+    <a href="#roadmap">Roadmap</a>
+    <div class="meta">
+      Environment: <b>darbotlabs</b><br/>
+      Org: darbotlabs.crm.dynamics.com<br/>
+      Env ID: cf7ff9ef-…-b7851614<br/>
+      Version 1.0 · June 11, 2026
+    </div>
+  </nav>
+
+  <main>
+    <div class="hero" id="overview">
+      <h1>Claim_Studio</h1>
+      <div class="tag">Workers' Compensation Case Management</div>
+      <p>Claim_Studio is a workers' compensation case-management solution for the Flagship Location Resorts legal &amp; risk team.
+      It provides a single workspace to intake workplace incidents, automatically classify them, track case status
+      and financial reserves, and analyze claim trends across properties — backed by a live Microsoft Dataverse table.</p>
+      <div class="pills">
+        <span class="pill">Power Apps Code App</span>
+        <span class="pill">Model-driven App</span>
+        <span class="pill">Dataverse</span>
+        <span class="pill">React + Vite + TypeScript</span>
+        <span class="pill">Live data</span>
+      </div>
+    </div>
+
+    <h2 id="architecture">Architecture</h2>
+    <p>The solution combines a code-first Power App for the day-to-day operator experience with a model-driven app
+    for administrative record management, both reading and writing the same Dataverse table.</p>
+    <div class="card">
+<pre><code>            ┌─────────────────────────────┐     ┌──────────────────────────────┐
+            │  Claim_Studio (Code App)     │     │  Workers' Comp Cases (MDA)   │
+            │  React + Vite + TS          │     │  Sitemap · Form · Views      │
+            │  Dashboard / Claims /       │     │  Admin record management     │
+            │  Report Incident /          │     │                              │
+            │  Incident Classifier        │     │                              │
+            └──────────────┬──────────────┘     └───────────────┬──────────────┘
+                           │  @microsoft/power-apps SDK          │ Unified Interface
+                           │  getClient() · getContext()         │
+                           ▼                                     ▼
+            ┌───────────────────────────────────────────────────────────────────┐
+            │   Common Data Service for Apps connector  (Dataverse, darbotlabs)  │
+            └───────────────────────────────┬───────────────────────────────────┘
+                                            ▼
+                       ┌──────────────────────────────────────────┐
+                       │  Dataverse table: WorkersCompensationCase │
+                       │  (logical name: owcp_claim)               │
+                       └──────────────────────────────────────────┘</code></pre>
+    </div>
+    <ul>
+      <li><b>Host bridge</b> — <code>@microsoft/power-apps</code> establishes a message-channel bridge to the Power Apps player host.</li>
+      <li><b>Context</b> — <code>getContext()</code> returns the environment id, tenant id and signed-in user.</li>
+      <li><b>Data client</b> — <code>getClient(dataSourcesInfo)</code> + a generated <code>MicrosoftDataverseService</code> wrap each connector operation.</li>
+      <li><b>Connection</b> — the bound <code>shared_commondataserviceforapps</code> connection targets the org; the app uses the organization-scoped operations so calls bind explicitly to it.</li>
+    </ul>
+
+    <h2 id="table">Data Model — WorkersCompensationCase</h2>
+    <div class="card">
+      <div class="kv">
+        <div class="k">Table name</div><div><b>WorkersCompensationCase</b></div>
+        <div class="k">Primary column</div><div><b>Claim Number</b></div>
+        <div class="k">Logical name</div><div><code>owcp_claim</code> (entity set <code>owcp_claims</code>)</div>
+        <div class="k">Primary id</div><div><code>owcp_claimid</code></div>
+        <div class="k">Primary name</div><div><code>owcp_claimnumber</code></div>
+      </div>
+      <p style="margin-top:12px"><b>Description.</b> This table contains records of cases for tracking, triaging,
+      analysis, classification, and routing. Each row is a single workers'-compensation case, from initial incident
+      intake through classification and final disposition.</p>
+    </div>
+    <div class="note">The canonical business name is <b>WorkersCompensationCase</b> with primary column <b>Claim Number</b>.
+    The application binds to the live logical schema <code>owcp_claim</code> / <code>owcp_claimnumber</code>.</div>
+
+    <h3 id="columns">Columns</h3>
+    <table>
+      <thead><tr><th>Business field</th><th>Logical name</th><th>Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Claim Number</td><td><code>owcp_claimnumber</code></td><td>Text (Primary)</td><td>Unique case id, e.g. OWCP-2026-1006</td></tr>
+        <tr><td>Claimant</td><td><code>owcp_claimant</code></td><td>Text</td><td>Injured employee's full name</td></tr>
+        <tr><td>Property</td><td><code>owcp_property</code></td><td>Choice</td><td>4 properties</td></tr>
+        <tr><td>Department</td><td><code>owcp_department</code></td><td>Choice</td><td>8 departments</td></tr>
+        <tr><td>Incident Type</td><td><code>owcp_incidenttype</code></td><td>Choice</td><td>9 categories</td></tr>
+        <tr><td>Body Part</td><td><code>owcp_bodypart</code></td><td>Text</td><td>Affected body part(s)</td></tr>
+        <tr><td>Severity</td><td><code>owcp_severity</code></td><td>Choice</td><td>Low / Moderate / High / Critical</td></tr>
+        <tr><td>Status</td><td><code>owcp_status</code></td><td>Choice</td><td>New … Closed (6 states)</td></tr>
+        <tr><td>Adjuster</td><td><code>owcp_adjuster</code></td><td>Choice</td><td>Assigned claims adjuster</td></tr>
+        <tr><td>Date of Injury</td><td><code>owcp_dateofinjury</code></td><td>Date</td><td>When the incident occurred</td></tr>
+        <tr><td>Date Reported</td><td><code>owcp_datereported</code></td><td>Date</td><td>Filing date (sort key)</td></tr>
+        <tr><td>Reserve (USD)</td><td><code>owcp_reserveusd</code></td><td>Currency</td><td>Provisioned financial reserve</td></tr>
+        <tr><td>Classified</td><td><code>owcp_classified</code></td><td>Yes/No</td><td>Whether AI-classified</td></tr>
+        <tr><td>Classifier Model</td><td><code>owcp_classifiermodel</code></td><td>Text</td><td>e.g. GPT-4.1 mini</td></tr>
+        <tr><td>Classifier Confidence</td><td><code>owcp_classifierconfidence</code></td><td>Decimal</td><td>0–1 score</td></tr>
+        <tr><td>Recommended Action</td><td><code>owcp_recommendedaction</code></td><td>Multiline</td><td>Suggested next step</td></tr>
+        <tr><td>Description</td><td><code>owcp_description</code></td><td>Multiline</td><td>Incident narrative; classifier input</td></tr>
+      </tbody>
+    </table>
+
+    <h3 id="choices">Choice option sets</h3>
+    <p>Option values are allocated sequentially from <code>100000000</code> in the order below. The app maps display
+    labels to numeric values on write and uses Dataverse formatted-value annotations on read.</p>
+    <table>
+      <thead><tr><th>Choice</th><th>Options (in value order)</th></tr></thead>
+      <tbody>
+        <tr><td>Property</td><td>Flagship Location · Flagship Location Tower · Flagship Location Palace (Macau) · Flagship Location Boston Harbor</td></tr>
+        <tr><td>Department</td><td>Housekeeping · Food &amp; Beverage · Casino Floor · Facilities / Engineering · Security · Hotel Operations · Culinary · Valet / Transportation</td></tr>
+        <tr><td>Incident Type</td><td>Slip / Trip / Fall · Lifting / Overexertion · Repetitive Strain · Struck By Object · Equipment / Machinery · Vehicle / Cart · Chemical Exposure · Burn / Heat · Other</td></tr>
+        <tr><td>Severity</td><td>Low · Moderate · High · Critical</td></tr>
+        <tr><td>Status</td><td>New · Under Review · Classified · Approved · Denied · Closed</td></tr>
+        <tr><td>Adjuster</td><td>Alex Carter · Cory Lutz · Keisha James · Dennis Kim · Daryl Yourk</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="connectivity">Live Data Connectivity</h2>
+    <p>All screens render from a single shared claims collection loaded from Dataverse at startup and refreshed after
+    writes. The data layer (<code>src/lib/dataverse.ts</code>) is the only module that talks to the connector.</p>
+    <h4>Connector operations</h4>
+    <p>The org URL is <b>resolved at runtime</b> via <code>GetOrganizations</code> (cached), so the
+    organization-scoped operations bind to whatever environment the app runs in:</p>
+    <table>
+      <thead><tr><th>Action</th><th>Operation</th><th>Key parameters</th></tr></thead>
+      <tbody>
+        <tr><td>Load cases</td><td><code>ListRecordsWithOrganization</code></td><td>organization, entityName=<code>owcp_claims</code>, prefer=include-annotations, $orderby=datereported desc</td></tr>
+        <tr><td>Create case</td><td><code>CreateRecordWithOrganization</code></td><td>organization, entityName, item=&lt;field map&gt;, prefer=return=representation</td></tr>
+        <tr><td>Connection metadata</td><td><code>GetOrganizations</code></td><td>matched by URL → org friendly name</td></tr>
+      </tbody>
+    </table>
+    <h4>Result handling</h4>
+    <ul>
+      <li><b>Success is always checked</b> — every call inspects <code>IOperationResult.success</code>; a failure throws with the connector error instead of being masked as an empty table.</li>
+      <li><b>Shape is validated</b> — list responses must contain a <code>value</code> array.</li>
+      <li><b>Graceful fallback</b> — outside the Power host (local dev) calls fail fast and the UI falls back to bundled seed data. A live connection with zero rows reads as “Dataverse (live · 0 rows),” not a fallback.</li>
+      <li><b>Timeouts</b> — each call is raced against a 30-second timeout.</li>
+    </ul>
+    <h4>Operational metadata (footer)</h4>
+    <table>
+      <thead><tr><th>Footer field</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Environment</td><td><code>GetOrganizations</code> friendly name (the connected org)</td></tr>
+        <tr><td>Tenant</td><td>Domain of the signed-in UPN (tenant GUID on hover)</td></tr>
+        <tr><td>Signed in</td><td><code>getContext().user.userPrincipalName</code></td></tr>
+        <tr><td>Dataverse</td><td>Bound organization URL (resolved at runtime)</td></tr>
+        <tr><td>Data Source</td><td>Live source + row count</td></tr>
+      </tbody>
+    </table>
+
+    <h4>Portability — no hard-coded environment values</h4>
+    <p>The application contains <b>no hard-coded environment-specific values</b> (no org URL, environment id, or
+    tenant id baked into the build). At startup the data layer calls <code>GetOrganizations</code> on the bound
+    connection and caches the resulting org URL; every Dataverse read/write and every deep link is built from that
+    runtime value plus the host <code>getContext()</code>. The verified-clean built bundle ships with the solution, so
+    the same artifact runs unchanged in any environment.</p>
+    <table>
+      <thead><tr><th>Value</th><th>How it is obtained</th></tr></thead>
+      <tbody>
+        <tr><td>Dataverse org URL</td><td>Runtime — <code>resolveOrg()</code> → <code>GetOrganizations</code> (cached)</td></tr>
+        <tr><td>Environment id</td><td>Runtime — <code>getContext().app.environmentId</code></td></tr>
+        <tr><td>Tenant id / user</td><td>Runtime — <code>getContext().user</code></td></tr>
+        <tr><td>Model-driven app name</td><td><code>dystudio_wccases</code> — a <i>solution identifier</i>, identical in every environment (portable, not env-specific)</td></tr>
+        <tr><td>Table / entity set</td><td><code>owcp_claim</code> / <code>owcp_claims</code> — solution identifier (portable)</td></tr>
+      </tbody>
+    </table>
+    <div class="note">The dev-only <code>power.config.json</code> still references the authoring environment/app id —
+    that file is the <code>pac code push</code> target pointer used during development and is <b>not</b> included in the
+    shipped solution bundle.</div>
+
+    <h2 id="codeapp">Claim_Studio Code App</h2>
+    <p>The operator-facing application — a Power Apps Code App built with React, Vite and TypeScript, published with
+    <code>pac code push</code>. Four screens are presented via a persistent left navigation rail.</p>
+
+    <h3 id="dashboard">Dashboard</h3>
+    <div class="card">
+      <p><b>Purpose.</b> Executive overview of the full case portfolio with drill-through into a filtered Claims view.</p>
+      <h4>KPI cards</h4>
+      <ul>
+        <li><b>Total Claims</b> — count of all cases.</li>
+        <li><b>Open / Active</b> — cases not Closed/Denied.</li>
+        <li><b>Total Reserve</b> — sum of Reserve (USD).</li>
+        <li><b>AI Classified</b> — % of cases with a classification.</li>
+      </ul>
+      <h4>Panels</h4>
+      <ul>
+        <li><b>Recent Claims</b> — five most recently reported cases.</li>
+        <li><b>Status Breakdown</b> — color-coded bars per status (click to filter).</li>
+        <li><b>Incident Type Distribution</b> — bars per type, sorted by volume.</li>
+      </ul>
+      <div class="note">Every figure is computed live from the Dataverse collection and recomputes on refresh.</div>
+    </div>
+
+    <h3 id="claims">Claims</h3>
+    <div class="card">
+      <p><b>Purpose.</b> Searchable, filterable register of all cases with a detail drawer.</p>
+      <ul>
+        <li>Free-text search across claim number, claimant, incident type, department, adjuster.</li>
+        <li>Filters: Status, Property, Open/Active toggle, Classified-only (drill-through).</li>
+        <li><b>Refresh (↻)</b> — reloads the canonical list from Dataverse.</li>
+        <li><b>View in Dataverse (⧉)</b> — opens the <code>owcp_claim</code> grid in the Workers' Comp Cases model-driven app (via portable <code>appname</code>).</li>
+        <li><b>Detail drawer</b> — full record + classification card; its own <b>View in Dataverse</b> opens that specific record.</li>
+      </ul>
+    </div>
+
+    <h3 id="report">Report Incident</h3>
+    <div class="card">
+      <p><b>Purpose.</b> Structured intake of a new incident, auto-classified, that writes a new case to Dataverse.</p>
+      <ol class="steps">
+        <li><b>Preview Classification</b> renders an Adaptive-Card-style preview of the record to be filed.</li>
+        <li><b>File Claim</b> builds the case, assigns the next claim number, classifies the narrative, and persists to Dataverse.</li>
+        <li>The button is disabled until valid; a helper line states exactly why (e.g. “N more characters needed”).</li>
+        <li>A success banner appears only after Dataverse confirms the write; the list reloads and the footer count increments.</li>
+        <li>On failure an error banner shows the connector message — no false success.</li>
+      </ol>
+      <div class="note ok">Validated end-to-end: claim <b>OWCP-2026-9002</b> was filed via the UI and confirmed in Dataverse with all choice labels resolved correctly.</div>
+    </div>
+
+    <h3 id="classifier">Incident Classifier</h3>
+    <div class="card">
+      <p><b>Purpose.</b> Interactive tool mirroring the Copilot Studio classification workflow — given a narrative it
+      returns a category, severity and recommended action.</p>
+      <ul>
+        <li>Free-text narrative with five built-in sample incidents.</li>
+        <li>Keyword rules score the narrative against incident categories; severity is escalated/de-escalated by injury descriptors; confidence scales with keyword density.</li>
+        <li>The same logic runs on intake in Report Incident, so filed cases arrive pre-classified.</li>
+      </ul>
+      <div class="note warn">The in-app classifier is a deterministic stand-in for a Copilot Studio prompt node. Swapping <code>classifyIncident()</code> for a live Copilot Studio / Dataverse call is the intended productionization path.</div>
+    </div>
+
+    <h2 id="mda">Workers' Comp Cases — Model-driven App</h2>
+    <div class="card">
+      <div class="kv">
+        <div class="k">App name</div><div><b>Workers' Comp Cases</b></div>
+        <div class="k">Unique name</div><div><code>dystudio_wccases</code></div>
+        <div class="k">Type</div><div>Model-driven (Unified Interface)</div>
+        <div class="k">Table</div><div>WorkersCompensationCase (<code>owcp_claim</code>)</div>
+        <div class="k">Views</div><div>Active OWCP Claims (enriched columns), Inactive OWCP Claims</div>
+        <div class="k">Form</div><div>Information — three sections: Claim Summary · Incident Details · Classification &amp; Financial</div>
+      </div>
+      <p style="margin-top:12px">Provides administrators a full grid, advanced find, charts, and the complete record form.
+      Deep links use the portable <code>appname</code> so they resolve in any tenant the solution is deployed to:</p>
+<pre><code>{orgUrl}/main.aspx?appname=dystudio_wccases&amp;pagetype=entitylist&amp;etn=owcp_claim
+{orgUrl}/main.aspx?appname=dystudio_wccases&amp;pagetype=entityrecord&amp;etn=owcp_claim&amp;id={recordId}</code></pre>
+    </div>
+
+    <h2 id="solution">Solution &amp; Components</h2>
+    <p>Everything is packaged in the unmanaged/managed <b>Claim Studio</b> solution (unique name <code>ClaimStudio</code>,
+    publisher <code>dystudio</code>).</p>
+    <table>
+      <thead><tr><th>Component</th><th>Type</th><th>Identifier</th></tr></thead>
+      <tbody>
+        <tr><td>WorkersCompensationCase table</td><td>Entity (+ forms, views, columns, option sets)</td><td><code>owcp_claim</code></td></tr>
+        <tr><td>Workers' Comp Cases</td><td>Model-driven app</td><td><code>dystudio_wccases</code></td></tr>
+        <tr><td>App sitemap</td><td>SiteMap</td><td><code>dystudio_wccases</code></td></tr>
+        <tr><td>Claim_Studio</td><td>Code app (canvas/code)</td><td><code>dystudio_owcpstudio_d6d0e</code></td></tr>
+        <tr><td>App icon</td><td>Web resource (SVG)</td><td><code>dystudio_owcp_app_icon.svg</code></td></tr>
+      </tbody>
+    </table>
+    <div class="note">Solutions carry <b>schema and apps, not data rows</b>. The sample cases were removed from the source
+    environment so deployments start clean.</div>
+
+    <h2 id="deploy">Deployment Guide</h2>
+    <p>Deploy to a new tenant/environment with the included PowerShell script and the exported solution zips.</p>
+    <h4>Prerequisites</h4>
+    <ul>
+      <li>Power Platform CLI: <code>winget install Microsoft.PowerPlatformCLI</code></li>
+      <li>System Customizer / System Administrator role in the target environment.</li>
+      <li>Files: <code>ClaimStudio_managed.zip</code>, <code>ClaimStudio_unmanaged.zip</code>, <code>Deploy-ClaimStudio.ps1</code>.</li>
+    </ul>
+    <h4>Run</h4>
+<pre><code># Production / test environment (managed)
+.\Deploy-ClaimStudio.ps1 -EnvironmentUrl https://contoso.crm.dynamics.com
+
+# Development environment (unmanaged)
+.\Deploy-ClaimStudio.ps1 -EnvironmentUrl https://dev.crm.dynamics.com `
+    -SolutionZip .\ClaimStudio_unmanaged.zip -Managed:$false
+
+# Headless / no browser (only when a new auth profile must be created)
+.\Deploy-ClaimStudio.ps1 -EnvironmentUrl https://contoso.crm.dynamics.com -UseDeviceCode
+
+# Force a fresh sign-in instead of reusing the active pac profile
+.\Deploy-ClaimStudio.ps1 -EnvironmentUrl https://contoso.crm.dynamics.com -ForceNewAuth</code></pre>
+    <p>The script reuses your active <code>pac</code> sign-in when possible (via <code>pac org select</code>, no
+    prompt), validates the solution zip, detects whether the solution already exists (fresh import vs. upgrade),
+    imports with retry, publishes, and verifies the result. It is safe to re-run.</p>
+    <div class="note ok"><b>Verified cross-environment:</b> the solution was deployed from the authoring environment
+    (<code>darbotlabs</code>) to a separate <code>test</code> environment and confirmed — table present, model-driven
+    app present, form with all 18 fields, and <b>0 rows</b> (clean). The upgrade path (re-deploy of a newer version)
+    was also verified.</div>
+    <h4>Post-deploy</h4>
+    <ol class="steps">
+      <li>Confirm the <b>Claim_Studio</b> code app and <b>Workers' Comp Cases</b> app appear in <code>make.powerapps.com</code>.</li>
+      <li>Share both apps and assign security roles.</li>
+      <li>Open the model-driven app grid: <code>{orgUrl}/main.aspx?appname=dystudio_wccases&amp;pagetype=entitylist&amp;etn=owcp_claim</code>.</li>
+      <li>First time the code app is played, confirm the Microsoft Dataverse connection when prompted.</li>
+      <li>Begin filing incidents from the code app, or load seed data.</li>
+    </ol>
+    <div class="note ok">The code app <b>resolves its Dataverse org at runtime</b> (via <code>GetOrganizations</code>),
+    so the same build works in any environment with <b>no rebuild required</b> and no environment values baked in.</div>
+
+    <h2 id="roadmap">Roadmap</h2>
+    <ul>
+      <li>Replace the deterministic classifier with the live Copilot Studio classification workflow.</li>
+      <li>Add edit/disposition actions (update Status, Reserve, Adjuster) from the Claims detail drawer.</li>
+      <li>Add server-side paging for large case volumes ($top / skip tokens).</li>
+      <li>Add dashboards/charts in the model-driven app for leadership reporting.</li>
+      <li>Parameterize <code>power.config.json</code> per developer / pipeline for the <code>pac code push</code> inner loop.</li>
+    </ul>
+
+    <footer>
+      Claim_Studio — Workers' Compensation Case Management · Solution Wiki v1.0 · generated June 11, 2026 ·
+      environment darbotlabs (cf7ff9ef-f698-e22d-b864-28f0b7851614).
+    </footer>
+  </main>
+</div>
+</body>
+</html>

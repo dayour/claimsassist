@@ -1,0 +1,32 @@
+{
+  "version": "1.0",
+  "appId": "98fa4285-c7e2-444a-b218-3401bddb429a",
+  "appDisplayName": "Claim_Studio",
+  "region": "prod",
+  "environmentId": "cf7ff9ef-f698-e22d-b864-28f0b7851614",
+  "description": "",
+  "buildPath": "./dist",
+  "buildEntryPoint": "index.html",
+  "localAppUrl": "http://localhost:3000",
+  "logoPath": "Default",
+  "connectionReferences": {
+    "9bf760ea-24d6-4662-8e5f-78fe3ee93c66": {
+      "id": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+      "displayName": "Microsoft Dataverse",
+      "dataSources": [
+        "commondataserviceforapps"
+      ],
+      "authenticationType": "Oauth",
+      "dataSets": {}
+    },
+    "40615198-3148-4a74-9e79-c4ca5c80408a": {
+      "id": "/providers/Microsoft.PowerApps/apis/shared_office365",
+      "displayName": "Office 365 Outlook",
+      "dataSources": [
+        "office365"
+      ],
+      "dataSets": {}
+    }
+  },
+  "databaseReferences": {}
+}
