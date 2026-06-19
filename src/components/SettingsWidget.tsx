@@ -109,7 +109,7 @@ export default function SettingsWidget({
               <div className="sp-actions">
                 <button className="sp-btn" onClick={() => { onRefresh(); }}>Refresh</button>
                 {dataverseUrl && (
-                  <a className="sp-btn primary" href={dataverseUrl} target="_blank" rel="noreferrer">View in Dataverse</a>
+                  <button className="sp-btn primary" onClick={() => window.open(dataverseUrl, "_blank")}>View in Dataverse</button>
                 )}
               </div>
               {source === "seed" && dvError && <div className="sp-err">{dvError.slice(0, 180)}</div>}

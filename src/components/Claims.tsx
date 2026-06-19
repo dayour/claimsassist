@@ -26,16 +26,14 @@ function ClaimDrawer({ claim, onClose, orgUrl, onOpenWorkspace }: { claim: Claim
                 </button>
               )}
               {recUrl && (
-                <a
+                <button
                   className="btn ghost"
-                  href={recUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  onClick={() => window.open(recUrl, "_blank")}
                   title="Open this record in Dataverse"
-                  style={{ display: "inline-flex", textDecoration: "none", fontSize: 12.5 }}
+                  style={{ fontSize: 12.5 }}
                 >
                   ⧉ View in Dataverse
-                </a>
+                </button>
               )}
             </div>
           </div>
@@ -175,16 +173,13 @@ export default function Claims({
         )}
         {onRefresh && <button className="btn ghost" onClick={onRefresh} title="Reload from Dataverse">↻</button>}
         {dataverseUrl && (
-          <a
+          <button
             className="btn ghost"
-            href={dataverseUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={() => window.open(dataverseUrl, "_blank")}
             title="Open the owcp_claim table in Power Apps"
-            style={{ textDecoration: "none" }}
           >
             ⧉ View in Dataverse
-          </a>
+          </button>
         )}
         <span style={{ color: "var(--muted)", fontSize: 13 }}>{rows.length} of {claims.length}</span>
       </div>
