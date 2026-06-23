@@ -10,6 +10,7 @@ interface Props {
   source: "loading" | "dataverse" | "seed";
   rowCount: number;
   dvError?: string;
+  connectionError?: string;
   dataverseUrl?: string;
   onRefresh: () => void;
   theme: string;
@@ -24,7 +25,7 @@ function SourceStatus({ source, rowCount }: { source: Props["source"]; rowCount:
 
 export default function SettingsWidget({
   envLabel, tenantLabel, userLabel, orgUrl, environmentId,
-  source, rowCount, dvError, dataverseUrl, onRefresh, theme, onTheme,
+  source, rowCount, dvError, connectionError, dataverseUrl, onRefresh, theme, onTheme,
 }: Props) {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -44,6 +45,7 @@ export default function SettingsWidget({
 
   const dvHost = orgUrl ? orgUrl.replace(/^https?:\/\//, "").replace(/\/$/, "") : "—";
   const initials = (userLabel && userLabel !== "—" ? userLabel : "?").slice(0, 2).toUpperCase();
+  const envText = envLabel || "—";
 
   return (
     <div className="settings">
@@ -111,6 +113,7 @@ export default function SettingsWidget({
                 )}
               </div>
               {source === "seed" && dvError && <div className="sp-err">{dvError.slice(0, 180)}</div>}
+              {connectionError && <div className="sp-err">{connectionError.slice(0, 220)}</div>}
             </div>
           </div>
         </>
@@ -125,7 +128,8 @@ export default function SettingsWidget({
       >
         <span className="settings-avatar">{initials}</span>
         <span className="st-id">
-          <span className="st-name">{userLabel}</span>
+          <span className="st-name" title={userLabel}>{userLabel}</span>
+          <span className="st-env" title={envText}>{envText}</span>
           <span className="st-status"><SourceStatus source={source} rowCount={rowCount} /></span>
         </span>
         <span className="st-gear" aria-hidden="true">⚙</span>

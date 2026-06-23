@@ -1,10 +1,10 @@
 # ClaimsAssist — Claim_Studio
 
-**Workers' Compensation Case Management** for the Flagship Location Resorts legal & risk team.
+**Workers' Compensation Case Management** for distributed operations teams.
 
 Claim_Studio is a Microsoft Power Platform solution that lets adjusters intake workplace
 incidents, auto-classify them, track case status and financial reserves, and analyze
-claim trends across properties — all backed by a live Microsoft Dataverse table.
+claim trends across regions — all backed by live Microsoft Dataverse tables.
 
 | | |
 |---|---|
@@ -13,7 +13,7 @@ claim trends across properties — all backed by a live Microsoft Dataverse tabl
 | **Table** | WorkersCompensationCase (logical `owcp_claim`, set `owcp_claims`) |
 | **Primary column** | Claim Number (`owcp_claimnumber`) |
 | **SDK** | `@microsoft/power-apps` (Dataverse connector client) |
-| **Solution** | `ClaimStudio` (managed + unmanaged zips in `solution/`) |
+| **Solution** | `OWCPStudio` (managed + unmanaged zips in `solution/`) |
 
 > The application contains **no hard-coded environment values**. The bound Dataverse
 > organization is resolved at runtime, so the same build runs unchanged in any
@@ -30,14 +30,17 @@ claim trends across properties — all backed by a live Microsoft Dataverse tabl
 │   ├── components/            # Dashboard, Claims, ReportIncident, Classifier, ui
 │   ├── lib/
 │   │   ├── dataverse.ts       # Data layer (runtime org resolution, CRUD)
-│   │   └── classifier.ts      # Deterministic incident classifier (Copilot Studio stand-in)
+│   │   ├── dataverseActions.ts # Runtime Dataverse actions / AI Builder wrappers
+│   │   └── classifier.ts      # Deterministic offline fallback
 │   ├── data/seed.ts           # Types + offline seed data
 │   └── generated/             # Generated Dataverse service (pac code)
 ├── .power/                    # Power Platform app schema (data source info)
 ├── solution/
 │   ├── ClaimStudio_managed.zip      # Managed solution (deploy to test/prod)
 │   ├── ClaimStudio_unmanaged.zip    # Unmanaged solution (dev)
-│   └── Deploy-ClaimStudio.ps1       # Hardened deployment script
+├── scripts/                   # Node/PAC validation and release gates
+├── docs/runtime-dataverse-actions.md
+├── docs/claim-studio-pdf-template-schema.md
 ├── OWCP_Claim.schema.json     # Canonical table/column definitions
 ├── Claim_Studio-Wiki.html      # Single-file solution wiki
 ├── Claim_Studio-Spec.docx      # Functional & data specification
@@ -72,6 +75,9 @@ flowchart TB
   wrap each connector operation.
 - **Connection** — calls use the connector's `"current"` organization alias, which always
   resolves to the org the connection is bound to.
+- **Runtime actions** — form fill assist, AI Builder prediction, and Copilot Studio/Power Automate
+    handoffs route through Dataverse connector actions where possible; submitted-claim email is
+    handled by a separate Dataverse-triggered workflow.
 
 ---
 
@@ -120,8 +126,10 @@ sequenceDiagram
 
     U->>RI: fill form + File Claim
     RI->>RI: validate (claimant + description ≥ 12 chars)
-    RI->>CL: classifyIncident(description)
-    CL-->>RI: { category, severity, recommendedAction, confidence }
+    RI->>DL: requestFormFillAssist(description + draft fields)
+    DL->>DV: PerformUnboundActionWithOrganization or PredictV2
+    DV-->>DL: draft category/severity/action
+    DL-->>RI: { category, severity, recommendedAction, confidence }
     RI->>APP: onCreate(claim)
     alt source == "dataverse"
         APP->>DL: createClaim(claim)
@@ -162,41 +170,51 @@ flowchart LR
 
 ---
 
+## Runtime Dataverse actions
+
+The Code App runtime uses the generated `MicrosoftDataverseService` as its Power Platform boundary.
+This keeps Dataverse CRUD, custom action execution, AI Builder prediction, and Copilot Studio/Power
+Automate handoffs on the same connector and connection.
+
+| Workflow | Connector operation | Configuration |
+|---|---|---|
+| Claim and workspace CRUD | `ListRecordsWithOrganization`, `CreateRecordWithOrganization`, `UpdateRecordWithOrganization` | none |
+| Form Fill Assist custom action | `PerformUnboundActionWithOrganization` | `VITE_FORM_FILL_ASSIST_ACTION` |
+| Form Fill Assist AI Builder model | `PredictV2` | `VITE_AI_BUILDER_MODEL_ID` |
+| Claim submitted automation | Dataverse-triggered workflow after row/attachment changes | configured in Dataverse |
+| Claim PDF generation | Copilot Studio / Power Automate workflow using the PDF template schema | `docs/claim-studio-pdf-template-schema.md` |
+
+See [docs/runtime-dataverse-actions.md](docs/runtime-dataverse-actions.md) for the connector audit and priority.
+
+### PDF template contract
+
+Claim_Studio does not rely on a free-form agent prompt for generated claim PDFs. The canonical fillable PDF contract is documented in [docs/claim-studio-pdf-template-schema.md](docs/claim-studio-pdf-template-schema.md). Use that schema in the Copilot Studio / Power Automate flow that runs after a claim is created so the PDF includes the right text boxes, child-record summaries, and `Region` terminology without generating a blank cover page.
+
+---
+
 ## Deployment flow
 
 ```mermaid
 flowchart TB
-    Z["solution/*.zip + Deploy-ClaimStudio.ps1"] --> P1["Preflight<br/>pac present · zip valid (solution.xml)"]
-    P1 --> A1["Connect<br/>reuse active pac profile via 'pac org select'<br/>(or create one; -UseDeviceCode / -ForceNewAuth)"]
-    A1 --> D1{"Solution exists?"}
-    D1 -->|no| I1["Fresh import"]
-    D1 -->|yes| I2["Stage-and-upgrade import"]
-    I1 --> R["Import with retry → publish customizations"]
-    I2 --> R
-    R --> V["Verify via pac solution list"]
-    V --> N["Print MDA grid URL + post-deploy steps"]
+    B["npm run build"] --> V["Node solution zip validation"]
+    V --> C["PAC add required Dataverse table components"]
+    C --> E["PAC export OWCPStudio from darbotlabs"]
+    E --> I["PAC import to target environment"]
+    I --> P["PAC publish customizations"]
+    P --> D["Dataverse metadata/runtime validation"]
 ```
 
 ### Deploy to a new environment
 
-```powershell
-# Production / test (managed)
-.\solution\Deploy-ClaimStudio.ps1 -EnvironmentUrl https://contoso.crm.dynamics.com
-
-# Development (unmanaged)
-.\solution\Deploy-ClaimStudio.ps1 -EnvironmentUrl https://dev.crm.dynamics.com `
-    -SolutionZip .\solution\ClaimStudio_unmanaged.zip -Managed:$false
-
-# Headless / no browser
-.\solution\Deploy-ClaimStudio.ps1 -EnvironmentUrl https://contoso.crm.dynamics.com -UseDeviceCode
-
-# Force a fresh sign-in instead of reusing the active pac profile
-.\solution\Deploy-ClaimStudio.ps1 -EnvironmentUrl https://contoso.crm.dynamics.com -ForceNewAuth
+```bash
+npm run release:check
+npm run release:export
+node scripts/release.mjs --deploy
 ```
 
-The script is hardened: input + zip validation, auth reuse (no forced prompt), fresh-vs-upgrade
-detection, import retry, publish, and post-import verification. It parses under both
-PowerShell 7 and Windows PowerShell 5.1. Verified cross-environment (darbotlabs → test).
+The release helper uses Node for local checks and PAC for Power Platform operations. It validates the
+solution zip, ensures required Dataverse table components are in `OWCPStudio`, exports from `darbotlabs`,
+imports to the target, publishes, and leaves runtime validation to Dataverse/native connector checks.
 
 ---
 
@@ -207,7 +225,7 @@ erDiagram
     WorkersCompensationCase {
         string  owcp_claimnumber PK "Claim Number"
         string  owcp_claimant "Claimant"
-        choice  owcp_property "Property (4)"
+        choice  owcp_property "Region (4)"
         choice  owcp_department "Department (8)"
         choice  owcp_incidenttype "Incident Type (9)"
         string  owcp_bodypart "Body Part"
@@ -255,7 +273,7 @@ pac code push    # publish a new version (target set in power.config.json)
 | **Incident Classifier** | Interactive classifier mirroring the Copilot Studio workflow (category, severity, recommended action). |
 
 See `Claim_Studio-Wiki.html` for the full solution wiki and `Claim_Studio-Spec.docx` for the
-functional & data specification.
+functional & data specification. See [docs/claim-studio-pdf-template-schema.md](docs/claim-studio-pdf-template-schema.md) for the external PDF-generation schema.
 
 ---
 
@@ -263,6 +281,6 @@ functional & data specification.
 
 - Replace the deterministic classifier with the live Copilot Studio classification workflow.
 - Add edit/disposition actions (Status, Reserve, Adjuster) from the Claims detail drawer.
-- PDF claim summary generated and attached on filing (File column scaffolding exists on the table).
+- Generate claim PDFs from the documented `claim_studio_incident_report_v1` schema in the Dataverse-triggered workflow and attach/link the result to the workspace.
 - Server-side paging for large case volumes.
 - Leadership dashboards/charts in the model-driven app.

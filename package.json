@@ -7,7 +7,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "validate:solution": "node scripts/validate-solution.mjs solution/ClaimStudio_unmanaged.zip",
+    "validate:dataverse": "node scripts/validate-dataverse.mjs",
+    "release:check": "node scripts/release.mjs --check",
+    "release:export": "node scripts/release.mjs --export"
   },
   "dependencies": {
     "@microsoft/power-apps": "^1.1.9",

@@ -5,8 +5,6 @@
 
 // Models
 export * as MicrosoftDataverseModel from './models/MicrosoftDataverseModel';
-export * as Office365OutlookModel from './models/Office365OutlookModel';
 
 // Services
 export * from './services/MicrosoftDataverseService';
-export * from './services/Office365OutlookService';

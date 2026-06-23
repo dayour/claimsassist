@@ -6,6 +6,10 @@ dist/
 *.local
 .vite/
 
+# Local Power Platform export/scratch artifacts
+.tmp/
+exports/
+
 # TypeScript build info
 *.tsbuildinfo
 

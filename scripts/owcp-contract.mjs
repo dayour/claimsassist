@@ -1,0 +1,73 @@
+export const SOURCE_ENVIRONMENT_URL = "https://darbotlabs.crm.dynamics.com/";
+export const TARGET_ENVIRONMENT_URL = "https://dydev25.crm.dynamics.com/";
+export const SOLUTION_UNIQUE_NAME = "OWCPStudio";
+export const MODEL_DRIVEN_APP_NAME = "dystudio_wccases";
+
+export const REQUIRED_TABLES = [
+  {
+    logicalName: "owcp_claim",
+    schemaName: "owcp_Claim",
+    entitySetName: "owcp_claims",
+    primaryIdAttribute: "owcp_claimid",
+    primaryNameAttribute: "owcp_claimnumber",
+    requiredColumns: [
+      "owcp_claimnumber",
+      "owcp_claimant",
+      "owcp_property",
+      "owcp_department",
+      "owcp_incidenttype",
+      "owcp_bodypart",
+      "owcp_severity",
+      "owcp_status",
+      "owcp_adjuster",
+      "owcp_dateofinjury",
+      "owcp_datereported",
+      "owcp_reserveusd",
+      "owcp_stage",
+      "owcp_c1received",
+      "owcp_c4received",
+      "owcp_c4source",
+      "owcp_classified",
+      "owcp_classifiermodel",
+      "owcp_classifierconfidence",
+      "owcp_recommendedaction",
+      "owcp_description",
+    ],
+  },
+  {
+    logicalName: "owcp_casenote",
+    schemaName: "owcp_CaseNote",
+    entitySetName: "owcp_casenotes",
+    primaryIdAttribute: "owcp_casenoteid",
+    primaryNameAttribute: "owcp_name",
+    parentLookupAttribute: "owcp_claimid",
+    requiredColumns: ["owcp_casenoteid", "owcp_name", "owcp_notetext", "owcp_author"],
+  },
+  {
+    logicalName: "owcp_casedocument",
+    schemaName: "owcp_CaseDocument",
+    entitySetName: "owcp_casedocuments",
+    primaryIdAttribute: "owcp_casedocumentid",
+    primaryNameAttribute: "owcp_name",
+    parentLookupAttribute: "owcp_claimid",
+    requiredColumns: ["owcp_casedocumentid", "owcp_name", "owcp_doctype", "owcp_link", "owcp_uploadedby"],
+  },
+  {
+    logicalName: "owcp_caseappointment",
+    schemaName: "owcp_CaseAppointment",
+    entitySetName: "owcp_caseappointments",
+    primaryIdAttribute: "owcp_caseappointmentid",
+    primaryNameAttribute: "owcp_subject",
+    parentLookupAttribute: "owcp_claimid",
+    requiredColumns: ["owcp_caseappointmentid", "owcp_subject", "owcp_start", "owcp_end", "owcp_location", "owcp_hastask"],
+  },
+  {
+    logicalName: "owcp_casetask",
+    schemaName: "owcp_CaseTask",
+    entitySetName: "owcp_casetasks",
+    primaryIdAttribute: "owcp_casetaskid",
+    primaryNameAttribute: "owcp_title",
+    parentLookupAttribute: "owcp_claimid",
+    requiredColumns: ["owcp_casetaskid", "owcp_title", "owcp_assignedto", "owcp_duedate", "owcp_taskstatus", "owcp_completionnote", "owcp_notify"],
+  },
+];

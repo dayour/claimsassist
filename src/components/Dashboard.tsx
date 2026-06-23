@@ -40,7 +40,7 @@ export default function Dashboard({
         <div className="card stat click" onClick={() => onDrill({})} title="View all claims">
           <div className="k">Total Claims</div>
           <div className="v">{total}</div>
-          <div className="d">across 4 properties</div>
+          <div className="d">across 4 regions</div>
         </div>
         <div className="card stat click" onClick={() => onDrill({ openActive: true })} title="View open / active claims">
           <div className="k">Open / Active</div>
@@ -67,7 +67,7 @@ export default function Dashboard({
               {recent.map((c) => (
                 <tr key={c.id} className="click" onClick={() => onDrill({ q: c.claimNumber })}>
                   <td className="cn" style={{ width: 130 }}>{c.claimNumber}</td>
-                  <td>{c.claimant}<div className="who">{c.property}</div></td>
+                  <td>{c.claimant}<div className="who">{c.region}</div></td>
                   <td>{c.incidentType}</td>
                   <td className="usd" style={{ textAlign: "right" }}>{usd(c.reserveUsd)}</td>
                 </tr>

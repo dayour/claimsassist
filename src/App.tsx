@@ -15,6 +15,7 @@ import {
   type ConnectionInfo,
   type CreateResult,
 } from "./lib/dataverse";
+import { dataverseTableUrl } from "./lib/dataverseSchema";
 
 type View = "dashboard" | "claims" | "report" | "classifier" | "department" | "workspace";
 
@@ -25,25 +26,6 @@ const NAV: { id: View; label: string; ico: string; crumb: string }[] = [
   { id: "classifier", label: "Incident Classifier", ico: "◆", crumb: "AI classification" },
   { id: "department", label: "Department", ico: "☷", crumb: "Tasks & calendar" },
 ];
-
-// Unique name of the "Workers' Comp Cases" model-driven app. This is a solution
-// identifier (identical in every environment), not an environment-specific value,
-// so deep links built from it are portable across tenants.
-const MDA_APPNAME = "dystudio_wccases";
-
-// Deep link to the owcp_claim table grid in the Workers' Comp Cases model-driven
-// app. Built entirely from runtime values (the resolved org URL, or the runtime
-// environment id) — returns null when neither is known (local dev) so the button
-// is hidden rather than pointing somewhere wrong.
-function dataverseTableUrl(orgUrl?: string, environmentId?: string): string | null {
-  if (orgUrl) {
-    return `${orgUrl.replace(/\/$/, "")}/main.aspx?appname=${MDA_APPNAME}&pagetype=entitylist&etn=owcp_claim`;
-  }
-  if (environmentId) {
-    return `https://make.powerapps.com/environments/${environmentId}/entities/owcp_claim/data`;
-  }
-  return null;
-}
 
 export default function App() {
   const [view, setView] = useState<View>("dashboard");
@@ -101,11 +83,11 @@ export default function App() {
 
   // Persist a new claim. When the connection is live, write to Dataverse and
   // only confirm success after the row is accepted, then reload the canonical
-  // list. When running on seed data (dev/offline), keep it local-only.
+  // list. Downstream email/notification is handled by the Dataverse workflow
+  // triggered from the saved row.
   async function addClaim(c: Claim): Promise<CreateResult> {
     if (source === "dataverse") {
-      // Email the PDF summary to the signed-in WC user on submit.
-      const res = await createClaim(c, conn?.user || undefined);
+      const res = await createClaim(c);
       if (res.ok) {
         const reloaded = await loadClaims();
         applyLoad(reloaded);
@@ -117,12 +99,13 @@ export default function App() {
     return { ok: true };
   }
 
-  const envLabel = conn?.orgName || (source === "dataverse" ? "Connected environment" : "Local / dev");
+  const connectionLoaded = conn !== null;
+  const envLabel = conn?.orgName || conn?.environmentId || (connectionLoaded ? "Power Apps host unavailable" : "Loading environment");
   // Prefer a friendly tenant domain (from the signed-in UPN) over the raw GUID.
   const tenantLabel = conn?.user?.includes("@")
     ? conn.user.split("@")[1]
-    : conn?.tenantId || "—";
-  const userLabel = conn?.user || "—";
+    : conn?.tenantId || (connectionLoaded ? "Tenant unavailable" : "Loading tenant");
+  const userLabel = conn?.user || (connectionLoaded ? "Power Apps user unavailable" : "Loading user");
 
   return (
     <div className="app">
@@ -150,6 +133,7 @@ export default function App() {
           source={source}
           rowCount={rowCount}
           dvError={dvError}
+          connectionError={conn?.hostError || conn?.dataverseError}
           dataverseUrl={dataverseTableUrl(conn?.orgUrl, conn?.environmentId) ?? undefined}
           onRefresh={refresh}
           theme={theme}
@@ -164,8 +148,8 @@ export default function App() {
             <div className="crumb">Claim_Studio · {active.crumb}</div>
           </div>
           <div className="user">
-            {conn?.user || "—"}
-            <span className="avatar">{(conn?.user || "?").slice(0, 2).toUpperCase()}</span>
+            {userLabel}
+            <span className="avatar">{(userLabel || "?").slice(0, 2).toUpperCase()}</span>
           </div>
         </div>
         <div className="content">

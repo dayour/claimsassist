@@ -1,1 +1,1 @@
-ClaimNumber,Claimant,Property,Department,IncidentType,BodyPart,Severity,Status,Adjuster,DateOfInjury,DateReported,ReserveUsd,Classified,ClassifierModel,ClassifierConfidence,RecommendedAction,Description
+ClaimNumber,Claimant,Region,Department,IncidentType,BodyPart,Severity,Status,Adjuster,DateOfInjury,DateReported,ReserveUsd,Classified,ClassifierModel,ClassifierConfidence,RecommendedAction,Description

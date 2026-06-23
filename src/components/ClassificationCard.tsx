@@ -7,7 +7,7 @@ export function ClaimAdaptiveCard({ claim, heading }: { claim: Claim; heading?: 
   const c = claim;
   const facts: [string, string][] = [
     ["Claimant", c.claimant || "—"],
-    ["Property", c.property],
+    ["Region", c.region],
     ["Department", c.department],
     ["Body Part", c.bodyPart || "—"],
     ["Date of Injury", c.dateOfInjury ? fmtDate(c.dateOfInjury) : "—"],

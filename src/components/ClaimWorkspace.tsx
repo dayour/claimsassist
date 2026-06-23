@@ -50,7 +50,7 @@ export default function ClaimWorkspace({
         <span className="cn" style={{ fontSize: 16 }}>{claim.claimNumber}</span>
         <StageBadge stage={stage} />
         <span className="spacer" />
-        <span style={{ color: "var(--muted)", fontSize: 13 }}>{claim.claimant} · {claim.property}</span>
+        <span style={{ color: "var(--muted)", fontSize: 13 }}>{claim.claimant} · {claim.region}</span>
       </div>
 
       <div className="ws-tabs">
@@ -80,7 +80,7 @@ export default function ClaimWorkspace({
             <h3>Case</h3>
             <div className="kv">
               <span className="k">Claimant</span><span className="v">{claim.claimant}</span>
-              <span className="k">Property</span><span className="v">{claim.property}</span>
+              <span className="k">Region</span><span className="v">{claim.region}</span>
               <span className="k">Department</span><span className="v">{claim.department}</span>
               <span className="k">Incident</span><span className="v">{claim.incidentType}</span>
               <span className="k">Severity</span><span className="v"><SeverityTag severity={claim.severity} /></span>

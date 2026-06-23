@@ -1,20 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Claim, ClaimsFilter } from "../data/seed";
-import { STATUSES, PROPERTIES } from "../data/seed";
+import { STATUSES, REGIONS } from "../data/seed";
 import { StatusPill, SeverityTag, usd, fmtDate } from "./ui";
-
-const GUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-// Deep link to the specific record in the Workers' Comp Cases model-driven app.
-function recordUrl(claim: Claim, orgUrl?: string): string | null {
-  if (!orgUrl || !GUID_RE.test(claim.id)) return null;
-  const base = orgUrl.replace(/\/$/, "");
-  return `${base}/main.aspx?appname=dystudio_wccases&pagetype=entityrecord&etn=owcp_claim&id=${claim.id}`;
-}
+import { dataverseRecordUrl } from "../lib/dataverseSchema";
 
 function ClaimDrawer({ claim, onClose, orgUrl, onOpenWorkspace }: { claim: Claim; onClose: () => void; orgUrl?: string; onOpenWorkspace?: (c: Claim) => void }) {
   const c = claim;
-  const recUrl = recordUrl(c, orgUrl);
+  const recUrl = dataverseRecordUrl(c.id, orgUrl);
   return (
     <>
       <div className="drawer-scrim" onClick={onClose} />
@@ -52,7 +44,7 @@ function ClaimDrawer({ claim, onClose, orgUrl, onOpenWorkspace }: { claim: Claim
         <div className="body">
           <div className="kv">
             <span className="k">Claimant</span><span className="v">{c.claimant}</span>
-            <span className="k">Property</span><span className="v">{c.property}</span>
+            <span className="k">Region</span><span className="v">{c.region}</span>
             <span className="k">Department</span><span className="v">{c.department}</span>
             <span className="k">Incident Type</span><span className="v">{c.incidentType}</span>
             <span className="k">Body Part</span><span className="v">{c.bodyPart}</span>
@@ -115,7 +107,7 @@ export default function Claims({
 }) {
   const [q, setQ] = useState(filter?.q ?? "");
   const [status, setStatus] = useState<string>(filter?.status ?? "");
-  const [property, setProperty] = useState<string>(filter?.property ?? "");
+  const [region, setRegion] = useState<string>(filter?.region ?? "");
   const [openActive, setOpenActive] = useState(!!filter?.openActive);
   const [classifiedOnly, setClassifiedOnly] = useState(!!filter?.classifiedOnly);
   const [incidentType, setIncidentType] = useState<string>(filter?.incidentType ?? "");
@@ -126,22 +118,22 @@ export default function Claims({
     if (!filter) return;
     setQ(filter.q ?? "");
     setStatus(filter.status ?? "");
-    setProperty(filter.property ?? "");
+    setRegion(filter.region ?? "");
     setIncidentType(filter.incidentType ?? "");
     setOpenActive(!!filter.openActive);
     setClassifiedOnly(!!filter.classifiedOnly);
   }, [filter]);
 
   function clearFilters() {
-    setQ(""); setStatus(""); setProperty(""); setIncidentType("");
+    setQ(""); setStatus(""); setRegion(""); setIncidentType("");
     setOpenActive(false); setClassifiedOnly(false);
   }
-  const anyFilter = q || status || property || incidentType || openActive || classifiedOnly;
+  const anyFilter = q || status || region || incidentType || openActive || classifiedOnly;
 
   const rows = useMemo(() => {
     return claims.filter((c) => {
       if (status && c.status !== status) return false;
-      if (property && c.property !== property) return false;
+      if (region && c.region !== region) return false;
       if (incidentType && c.incidentType !== incidentType) return false;
       if (openActive && ["Closed", "Denied"].includes(c.status)) return false;
       if (classifiedOnly && !c.classification) return false;
@@ -151,7 +143,7 @@ export default function Claims({
       }
       return true;
     });
-  }, [claims, q, status, property, incidentType, openActive, classifiedOnly]);
+  }, [claims, q, status, region, incidentType, openActive, classifiedOnly]);
 
   return (
     <div>
@@ -161,9 +153,9 @@ export default function Claims({
           <option value="">All statuses</option>
           {STATUSES.map((s) => <option key={s}>{s}</option>)}
         </select>
-        <select className="select" value={property} onChange={(e) => setProperty(e.target.value)}>
-          <option value="">All properties</option>
-          {PROPERTIES.map((p) => <option key={p}>{p}</option>)}
+        <select className="select" value={region} onChange={(e) => setRegion(e.target.value)}>
+          <option value="">All regions</option>
+          {REGIONS.map((r) => <option key={r}>{r}</option>)}
         </select>
         <button
           className={`btn ghost${openActive ? " toggle-on" : ""}`}
@@ -201,7 +193,7 @@ export default function Claims({
         <table className="claims">
           <thead>
             <tr>
-              <th>Claim #</th><th>Claimant</th><th>Incident</th><th>Property</th>
+              <th>Claim #</th><th>Claimant</th><th>Incident</th><th>Region</th>
               <th>Severity</th><th>Status</th><th>Adjuster</th><th style={{ textAlign: "right" }}>Reserve</th>
             </tr>
           </thead>
@@ -211,7 +203,7 @@ export default function Claims({
                 <td className="cn">{c.claimNumber}</td>
                 <td>{c.claimant}<div className="who">{c.department}</div></td>
                 <td>{c.incidentType}<div className="who">{c.bodyPart}</div></td>
-                <td>{c.property}</td>
+                <td>{c.region}</td>
                 <td><SeverityTag severity={c.severity} /></td>
                 <td><StatusPill status={c.status} /></td>
                 <td className="who" style={{ color: "var(--ink)" }}>{c.adjuster}</td>

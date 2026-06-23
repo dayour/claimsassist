@@ -10,8 +10,22 @@
 // "empty table".
 
 import { MicrosoftDataverseService } from "../generated";
-import { Office365OutlookService } from "../generated";
 import { generateClaimPdf } from "./pdf";
+import {
+  ANNOTATION_ENTITY_SET,
+  APPOINTMENT_ENTITY_SET,
+  APPOINTMENT_SELECT,
+  CLAIM_ENTITY_SET,
+  CLAIM_SELECT,
+  CURRENT_ORG,
+  DOCUMENT_ENTITY_SET,
+  DOCUMENT_SELECT,
+  NOTE_ENTITY_SET,
+  NOTE_SELECT,
+  ODATA_INCLUDE_ANNOTATIONS,
+  TASK_ENTITY_SET,
+  TASK_SELECT,
+} from "./dataverseSchema";
 import type {
   Claim, ClaimStatus, Severity, IncidentType,
   CaseStage, TaskStatus, DocType,
@@ -19,7 +33,7 @@ import type {
 } from "../data/seed";
 import {
   claims as seedClaims,
-  PROPERTIES,
+  REGIONS,
   DEPARTMENTS,
   INCIDENT_TYPES,
   STATUSES,
@@ -36,13 +50,8 @@ const SEVERITIES: Severity[] = ["Low", "Moderate", "High", "Critical"];
 // via the connector's "current" alias, so the same build runs unchanged in any
 // environment. The bound org's real URL (for deep links / footer) is discovered
 // at runtime by sniffing the @odata.id annotation on returned rows.
-const ENTITY_SET = "owcp_claims";
-// Dataverse Notes (annotation) entity set — stores the claim PDF as a real,
-// server-side-decoded file attachment on the claim record.
-const ANNOTATION_SET = "annotations";
-// The connector accepts "current" as the organization for *WithOrganization
-// operations; it always resolves to the org the connection is bound to.
-const CURRENT_ORG = "current";
+const ENTITY_SET = CLAIM_ENTITY_SET;
+const ANNOTATION_SET = ANNOTATION_ENTITY_SET;
 const FORMATTED = "@OData.Community.Display.V1.FormattedValue";
 
 // Choice option values are allocated from 100000000 in schema/seed order.
@@ -52,7 +61,7 @@ function optionMap<T extends string>(values: readonly T[]): Record<T, number> {
   values.forEach((v, i) => (m[v] = 100000000 + i));
   return m;
 }
-const PROPERTY_OPT = optionMap(PROPERTIES);
+const REGION_OPT = optionMap(REGIONS);
 const DEPARTMENT_OPT = optionMap(DEPARTMENTS);
 const INCIDENT_OPT = optionMap(INCIDENT_TYPES);
 const SEVERITY_OPT = optionMap(SEVERITIES);
@@ -71,7 +80,7 @@ function rowToClaim(r: Row): Claim {
     id: str(r, "owcp_claimid") || "dv-" + Math.random().toString(36).slice(2, 8),
     claimNumber: str(r, "owcp_claimnumber"),
     claimant: str(r, "owcp_claimant"),
-    property: fmt(r, "owcp_property"),
+    region: fmt(r, "owcp_property"),
     department: fmt(r, "owcp_department"),
     incidentType: (fmt(r, "owcp_incidenttype") || "Other") as IncidentType,
     bodyPart: str(r, "owcp_bodypart") || "Unspecified",
@@ -103,7 +112,7 @@ export function claimToRow(c: Claim): Record<string, unknown> {
   const row: Record<string, unknown> = {
     owcp_claimnumber: c.claimNumber,
     owcp_claimant: c.claimant,
-    owcp_property: PROPERTY_OPT[c.property as keyof typeof PROPERTY_OPT],
+    owcp_property: REGION_OPT[c.region as keyof typeof REGION_OPT],
     owcp_department: DEPARTMENT_OPT[c.department as keyof typeof DEPARTMENT_OPT],
     owcp_incidenttype: INCIDENT_OPT[c.incidentType],
     owcp_bodypart: c.bodyPart,
@@ -184,8 +193,8 @@ export function resolveOrg(): Promise<ResolvedOrg> {
           const probe = await exec(
             "Dataverse probe",
             MicrosoftDataverseService.ListRecordsWithOrganization(
-              CURRENT_ORG, ENTITY_SET, 'odata.include-annotations="*"',
-              undefined, false, false, undefined, undefined, undefined, undefined, undefined, 1
+              CURRENT_ORG, ENTITY_SET, ODATA_INCLUDE_ANNOTATIONS,
+              undefined, false, false, "owcp_claimid", undefined, undefined, undefined, undefined, 1
             )
           );
           const pv = (probe as { value?: Row[] })?.value ?? [];
@@ -228,11 +237,11 @@ export async function loadClaims(): Promise<LoadResult> {
       MicrosoftDataverseService.ListRecordsWithOrganization(
         CURRENT_ORG,
         ENTITY_SET,
-        'odata.include-annotations="*"',
+        ODATA_INCLUDE_ANNOTATIONS,
         undefined,
         false,
         false,
-        undefined,
+        CLAIM_SELECT,
         undefined,
         "owcp_datereported desc"
       )
@@ -262,7 +271,7 @@ export interface CreateResult {
   warning?: string;
 }
 
-export async function createClaim(c: Claim, emailTo?: string): Promise<CreateResult> {
+export async function createClaim(c: Claim): Promise<CreateResult> {
   let created: unknown;
   try {
     created = await exec(
@@ -280,12 +289,13 @@ export async function createClaim(c: Claim, emailTo?: string): Promise<CreateRes
     return { ok: false, error: errMessage(e) };
   }
 
-  // The claim is saved. Everything below (PDF generation, saving it to the
-  // owcp_claimpdf file column, and emailing it) is best-effort: a failure here
-  // is surfaced as a non-fatal warning but never undoes the saved claim.
+  // The claim is saved. Everything below (PDF generation and saving it to the
+  // Dataverse record) is best-effort: a failure here is surfaced as a
+  // non-fatal warning but never undoes the saved claim. Email/notification is
+  // handled by a Dataverse-triggered workflow outside this app.
   const warnings: string[] = [];
 
-  // Generate the PDF once and reuse it for both the file column and the email.
+  // Generate the PDF once and save it as a Dataverse attachment.
   let pdf: { base64: string; bytes: Uint8Array; fileName: string } | undefined;
   try {
     pdf = generateClaimPdf(c);
@@ -340,35 +350,6 @@ export async function createClaim(c: Claim, emailTo?: string): Promise<CreateRes
     }
   }
 
-  // Email the PDF summary to the WC user.
-  if (emailTo && pdf) {
-    try {
-      const result = await Office365OutlookService.SendEmailV2({
-        To: emailTo,
-        Subject: `New WC claim filed: ${c.claimNumber} — ${c.claimant}`,
-        Body:
-          `<p>A new workers' compensation claim has been filed in Claim_Studio.</p>` +
-          `<table style="border-collapse:collapse;font-family:Segoe UI,Arial,sans-serif;font-size:14px">` +
-          `<tr><td style="padding:3px 12px 3px 0;color:#595959">Claim Number</td><td><b>${c.claimNumber}</b></td></tr>` +
-          `<tr><td style="padding:3px 12px 3px 0;color:#595959">Claimant</td><td>${c.claimant}</td></tr>` +
-          `<tr><td style="padding:3px 12px 3px 0;color:#595959">Property</td><td>${c.property}</td></tr>` +
-          `<tr><td style="padding:3px 12px 3px 0;color:#595959">Incident Type</td><td>${c.incidentType}</td></tr>` +
-          `<tr><td style="padding:3px 12px 3px 0;color:#595959">Severity</td><td>${c.severity}</td></tr>` +
-          `<tr><td style="padding:3px 12px 3px 0;color:#595959">Assigned Adjuster</td><td>${c.adjuster}</td></tr>` +
-          `</table>` +
-          `<p>The full claim summary is attached as a PDF.</p>` +
-          `<p style="color:#8b93a3;font-size:12px">Sent automatically by Claim_Studio.</p>`,
-        Attachments: [{ Name: pdf.fileName, ContentBytes: pdf.base64 }],
-        Importance: "Normal",
-      });
-      if (!result || !result.success) {
-        throw new Error(result?.error ? errMessage(result.error) : "SendEmailV2 returned no success");
-      }
-    } catch (e) {
-      warnings.push(`the PDF email could not be sent (${errMessage(e)})`);
-    }
-  }
-
   return warnings.length ? { ok: true, warning: `Claim saved, but ${warnings.join("; ")}.` } : { ok: true };
 }
 
@@ -407,21 +388,21 @@ async function resolveCreatedId(created: unknown, claimNumber: string): Promise<
 // Case lifecycle + workspace (WC)
 // ---------------------------------------------------------------------------
 
-const NOTE_SET = "owcp_casenotes";
-const DOC_SET = "owcp_casedocuments";
-const APPT_SET = "owcp_caseappointments";
-const TASK_SET = "owcp_casetasks";
+const NOTE_SET = NOTE_ENTITY_SET;
+const DOC_SET = DOCUMENT_ENTITY_SET;
+const APPT_SET = APPOINTMENT_ENTITY_SET;
+const TASK_SET = TASK_ENTITY_SET;
 
 function unwrap(data: unknown): Row[] {
   const v = (data as { value?: Row[] })?.value ?? [];
   return v.map((it) => ((it as { dynamicProperties?: Row }).dynamicProperties ?? it) as Row);
 }
 
-async function listBy<T>(label: string, set: string, filter: string, orderby: string, map: (r: Row) => T): Promise<T[]> {
+async function listBy<T>(label: string, set: string, select: string, filter: string, orderby: string, map: (r: Row) => T): Promise<T[]> {
   const data = await exec(
     label,
     MicrosoftDataverseService.ListRecordsWithOrganization(
-      CURRENT_ORG, set, 'odata.include-annotations="*"', undefined, false, false, undefined, filter || undefined, orderby
+      CURRENT_ORG, set, ODATA_INCLUDE_ANNOTATIONS, undefined, false, false, select, filter || undefined, orderby
     )
   );
   return unwrap(data).map(map);
@@ -507,10 +488,10 @@ function rowToTask(r: Row): CaseTask {
 export async function loadWorkspace(claimId: string): Promise<Workspace> {
   const f = `_owcp_claimid_value eq ${claimId}`;
   const [notes, documents, appointments, tasks] = await Promise.all([
-    listBy("Notes", NOTE_SET, f, "createdon desc", rowToNote).catch(() => []),
-    listBy("Documents", DOC_SET, f, "createdon desc", rowToDoc).catch(() => []),
-    listBy("Appointments", APPT_SET, f, "owcp_start asc", rowToAppt).catch(() => []),
-    listBy("Tasks", TASK_SET, f, "owcp_duedate asc", rowToTask).catch(() => []),
+    listBy("Notes", NOTE_SET, NOTE_SELECT, f, "createdon desc", rowToNote).catch(() => []),
+    listBy("Documents", DOC_SET, DOCUMENT_SELECT, f, "createdon desc", rowToDoc).catch(() => []),
+    listBy("Appointments", APPT_SET, APPOINTMENT_SELECT, f, "owcp_start asc", rowToAppt).catch(() => []),
+    listBy("Tasks", TASK_SET, TASK_SELECT, f, "owcp_duedate asc", rowToTask).catch(() => []),
   ]);
   return { notes, documents, appointments, tasks };
 }
@@ -566,10 +547,10 @@ export async function updateTask(
 
 // ---- Department roll-ups ----
 export async function loadAllTasks(): Promise<CaseTask[]> {
-  return listBy("All tasks", TASK_SET, "", "owcp_duedate asc", rowToTask).catch(() => []);
+  return listBy("All tasks", TASK_SET, TASK_SELECT, "", "owcp_duedate asc", rowToTask).catch(() => []);
 }
 export async function loadAllAppointments(): Promise<CaseAppointment[]> {
-  return listBy("All appointments", APPT_SET, "", "owcp_start asc", rowToAppt).catch(() => []);
+  return listBy("All appointments", APPT_SET, APPOINTMENT_SELECT, "", "owcp_start asc", rowToAppt).catch(() => []);
 }
 
 export interface ConnectionInfo {
@@ -578,32 +559,51 @@ export interface ConnectionInfo {
   user?: string;
   orgName?: string;
   orgUrl?: string;
+  hostError?: string;
+  dataverseError?: string;
 }
 
-// Pulls real connection/host metadata so the footer is not hard-coded.
-// Uses the SDK host context (environment/tenant/user) plus the connected
+function withTimeout<T>(promise: Promise<T>, ms: number, message: string): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<never>((_, reject) => setTimeout(() => reject(new Error(message)), ms)),
+  ]);
+}
+
+// Pulls real connection/host metadata so the footer is not hard-coded or URL-derived.
+// Uses the Power Apps host context (environment/tenant/user) plus the connected
 // Dataverse org (matched by URL) from GetOrganizations.
 export async function getConnectionInfo(): Promise<ConnectionInfo> {
   const info: ConnectionInfo = {};
 
   try {
     const { getContext } = await import("@microsoft/power-apps/app");
-    const ctx = await getContext();
-    info.environmentId = ctx?.app?.environmentId;
-    info.tenantId = ctx?.user?.tenantId;
-    info.user = ctx?.user?.userPrincipalName || ctx?.user?.fullName;
-  } catch {
-    // Outside the Power host (dev) — leave host fields undefined.
+    const ctx = await withTimeout(getContext(), 5000, "Power Apps host context timed out");
+    info.environmentId = ctx.app.environmentId;
+    info.tenantId = ctx.user.tenantId;
+    info.user = ctx.user.userPrincipalName || ctx.user.fullName;
+
+    const missing = [
+      !info.environmentId && "app.environmentId",
+      !info.user && "user.userPrincipalName/fullName",
+    ].filter(Boolean);
+    if (missing.length) {
+      info.hostError = `Power Apps host context missing ${missing.join(", ")}`;
+    }
+  } catch (e) {
+    info.hostError = `Power Apps host context unavailable: ${errMessage(e)}`;
   }
 
   try {
-    const org = await resolveOrg();
+    const org = await withTimeout(resolveOrg(), 5000, "Dataverse organization metadata timed out");
     if (org.url) {
       info.orgUrl = org.url;
       info.orgName = org.name;
+    } else {
+      info.dataverseError = "Dataverse organization metadata unavailable";
     }
-  } catch {
-    // Connector unavailable — leave org fields undefined (dev/seed mode).
+  } catch (e) {
+    info.dataverseError = `Dataverse organization metadata unavailable: ${errMessage(e)}`;
   }
 
   return info;

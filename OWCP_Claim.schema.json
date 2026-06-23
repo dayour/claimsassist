@@ -1,5 +1,5 @@
 {
-  "$comment": "Claim_Studio — Dataverse table schema for the Workers' Comp Claims Tracker. Consumed by New-OwcpClaimTable.ps1 to create the table + columns via the Dataverse Web API. Edit values here; the script reads this file.",
+  "$comment": "Claim_Studio — Dataverse table schema for the Workers' Comp Claims Tracker. Used as the source contract for the Code App and Dataverse solution validation.",
   "publisherPrefix": "owcp",
   "table": {
     "schemaName": "owcp_Claim",
@@ -18,8 +18,8 @@
   },
   "columns": [
     { "schemaName": "owcp_Claimant", "displayName": "Claimant", "type": "String", "maxLength": 200, "requiredLevel": "ApplicationRequired", "description": "Full name of the injured employee." },
-    { "schemaName": "owcp_Property", "displayName": "Property", "type": "Choice", "requiredLevel": "ApplicationRequired", "description": "Business property where the incident occurred.",
-      "options": ["Flagship Location", "Flagship Location Tower", "Flagship Location Palace (Macau)", "Flagship Location Boston Harbor"] },
+    { "schemaName": "owcp_Property", "displayName": "Region", "type": "Choice", "requiredLevel": "ApplicationRequired", "description": "Business region where the incident occurred.",
+      "options": ["Pacific", "East Coast", "EMEA", "ROW"] },
     { "schemaName": "owcp_Department", "displayName": "Department", "type": "Choice", "requiredLevel": "ApplicationRequired", "description": "Operational department of the claimant.",
       "options": ["Housekeeping", "Food & Beverage", "Casino Floor", "Facilities / Engineering", "Security", "Hotel Operations", "Culinary", "Valet / Transportation"] },
     { "schemaName": "owcp_IncidentType", "displayName": "Incident Type", "type": "Choice", "requiredLevel": "None", "description": "Incident category assigned by the classifier.",
@@ -30,7 +30,7 @@
     { "schemaName": "owcp_Status", "displayName": "Status", "type": "Choice", "requiredLevel": "ApplicationRequired", "description": "Claim lifecycle status.",
       "options": ["New", "Under Review", "Classified", "Approved", "Denied", "Closed"] },
     { "schemaName": "owcp_Adjuster", "displayName": "Adjuster", "type": "Choice", "requiredLevel": "None", "description": "Assigned claims adjuster.",
-      "options": ["Alex Carter", "Cory Lutz", "Keisha James", "Dennis Kim", "Daryl Yourk"] },
+      "options": ["Alan Spector", "Bob Smith", "Ashley Samstone", "Anton Clipeus", "Darbot Timelarp"] },
     { "schemaName": "owcp_DateOfInjury", "displayName": "Date of Injury", "type": "DateOnly", "requiredLevel": "ApplicationRequired", "description": "Date the injury occurred." },
     { "schemaName": "owcp_DateReported", "displayName": "Date Reported", "type": "DateOnly", "requiredLevel": "None", "description": "Date the claim was reported." },
     { "schemaName": "owcp_ReserveUsd", "displayName": "Reserve (USD)", "type": "Money", "requiredLevel": "None", "minValue": 0, "maxValue": 100000000, "precision": 2, "description": "Financial reserve provisioned for the claim." },

@@ -1,13 +1,13 @@
 # Claim_Studio - Workers' Comp Claims Tracker - Consolidated Data Export
 "# Single-file CSV. Sections: META, DASHBOARD, CLAIMS, REPORT_INCIDENT, INCIDENT_CLASSIFIER"
-# Generated from the OWCP capture (Flagship Location working session).
+# Generated from the OWCP capture (Pacific working session).
 
 ### META
 Key,Value
 App,Claim_Studio
 AppId,(assigned on pac code push)
 Environment,Legal Dev Environment
-Tenant,"Flagship Location"
+Tenant,"Pacific"
 Region,prod
 SourceCapture,Screen Recording 2026-05-29 100241.mp4
 CaptureEngine,Yumlog Paperboy half-step bisection
@@ -18,7 +18,7 @@ GeneratedDate,2026-06-05
 
 ### DASHBOARD :: KPIs
 Metric,Value,Detail
-Total Claims,60,across 4 properties
+Total Claims,60,across 4 regions
 Open / Active,44,awaiting review or decision
 Total Reserve (USD),658700,"$658,700 provisioned"
 AI Classified,85%,51 of 60
@@ -52,20 +52,20 @@ Moderate,26
 High,9
 Critical,5
 
-### DASHBOARD :: Property Rollup
-Property,Claims,OpenActive,TotalReserveUsd
-Flagship Location,14,11,177100
-Flagship Location Tower,12,9,125200
-Flagship Location Palace (Macau),12,10,117100
-Flagship Location Boston Harbor,22,14,239300
+### DASHBOARD :: Region Rollup
+Region,Claims,OpenActive,TotalReserveUsd
+Pacific,14,11,177100
+EMEA,12,9,125200
+ROW,12,10,117100
+East Coast,22,14,239300
 
 ### DASHBOARD :: Adjuster Workload
 Adjuster,AssignedClaims,OpenActive,TotalReserveUsd
-Alex Carter,13,7,150600
-Cory Lutz,18,13,204400
-Keisha James,6,5,75000
-Dennis Kim,15,13,158600
-Daryl Yourk,8,6,70100
+Alan Spector,13,7,150600
+Bob Smith,18,13,204400
+Ashley Samstone,6,5,75000
+Anton Clipeus,15,13,158600
+Darbot Timelarp,8,6,70100
 
 ### DASHBOARD :: Monthly Reported Trend
 Month,ClaimsReported,TotalReserveUsd
@@ -75,73 +75,73 @@ Month,ClaimsReported,TotalReserveUsd
 2026-05,20,217000
 
 ### CLAIMS :: Records
-ClaimNumber,Claimant,Property,Department,IncidentType,BodyPart,Severity,Status,Adjuster,DateOfInjury,DateReported,ReserveUsd,Classified,ClassifierModel,ClassifierConfidence,RecommendedAction,Description
-OWCP-2026-1001,Jamal Bennett,Flagship Location Boston Harbor,Food & Beverage,Repetitive Strain,Shoulder,Low,Closed,Cory Lutz,2026-05-18,2026-05-19,28500,Yes,GPT-4.1 mini,0.85,Schedule ergonomic assessment; rotate task assignments.,Persistent shoulder pain after extended shifts in the porte-cochere over a busy weekend.
-OWCP-2026-1002,Grace Bell,Flagship Location Tower,Culinary,Chemical Exposure,Ankle,Moderate,Under Review,Dennis Kim,2026-02-21,2026-02-23,7300,Yes,GPT-4.1 mini,0.81,Pull SDS; check ventilation; confirm work-related causation.,Irritation after exposure to a luggage cart in a back-of-house the loading dock.
-OWCP-2026-1003,Olivia Murphy,Flagship Location Tower,Casino Floor,Repetitive Strain,Right wrist,Low,Closed,Daryl Yourk,2026-05-30,2026-05-31,3100,Yes,GPT-4.1 mini,0.93,Schedule ergonomic assessment; rotate task assignments.,Persistent right wrist pain after extended shifts in a guest corridor over a busy weekend.
-OWCP-2026-1004,Wei Zhang,Flagship Location,Housekeeping,Burn / Heat,Eyes / respiratory,Low,Under Review,Cory Lutz,2026-02-26,2026-02-26,6200,Yes,GPT-4.1 mini,0.84,Document first aid; assess burn degree and surface area.,Burn on the eyes / respiratory from contact with a hot a saute pan in the kitchen.
-OWCP-2026-1005,Wei Zhang,Flagship Location,Housekeeping,Repetitive Strain,Left wrist,High,Approved,Daryl Yourk,2026-03-20,2026-03-21,21000,Yes,GPT-4.1 mini,0.84,Schedule ergonomic assessment; rotate task assignments.,Persistent left wrist pain after extended shifts in the central plant over a busy weekend.
-OWCP-2026-1006,Liam Silva,Flagship Location Boston Harbor,Hotel Operations,Slip / Trip / Fall,Ankle,Moderate,Classified,Dennis Kim,2026-04-20,2026-04-21,6200,Yes,GPT-4.1 mini,0.74,Verify wet-floor signage; order imaging for the impacted joint.,Slipped on a wet a guest corridor and broke the fall with an outstretched hand.
-OWCP-2026-1007,Sofia Tran,Flagship Location Boston Harbor,Security,Other,Ankle,Moderate,Approved,Dennis Kim,2026-05-06,2026-05-10,2200,Yes,GPT-4.1 mini,0.78,Route to adjuster for manual review - no clear pattern detected.,Reported discomfort in ankle during a shift in a guest corridor; cause under review.
-OWCP-2026-1008,Mei Russo,Flagship Location Boston Harbor,Facilities / Engineering,Burn / Heat,Left wrist,Critical,New,Dennis Kim,2026-03-28,2026-03-31,1800,No,,,,Burn on the left wrist from contact with a hot a keg in the kitchen.
-OWCP-2026-1009,Derek Delgado,Flagship Location Palace (Macau),Valet / Transportation,Other,Shoulder,Moderate,Under Review,Dennis Kim,2026-05-24,2026-05-27,15800,Yes,GPT-4.1 mini,0.7,Route to adjuster for manual review - no clear pattern detected.,Reported discomfort in shoulder during a shift in the central plant; cause under review.
-OWCP-2026-1010,Maria Petrov,Flagship Location,Valet / Transportation,Other,Knee,Moderate,Under Review,Cory Lutz,2026-02-26,2026-03-01,1800,Yes,GPT-4.1 mini,0.89,Route to adjuster for manual review - no clear pattern detected.,Reported discomfort in knee during a shift in the porte-cochere; cause under review.
-OWCP-2026-1011,Carlos Silva,Flagship Location Tower,Security,Chemical Exposure,Shoulder,Moderate,Under Review,Daryl Yourk,2026-02-25,2026-02-26,15800,Yes,GPT-4.1 mini,0.7,Pull SDS; check ventilation; confirm work-related causation.,Irritation after exposure to a keg in a back-of-house the spa.
-OWCP-2026-1012,Fatima Cole,Flagship Location Boston Harbor,Housekeeping,Chemical Exposure,Knee,Moderate,Under Review,Dennis Kim,2026-02-10,2026-02-12,21000,Yes,GPT-4.1 mini,0.85,Pull SDS; check ventilation; confirm work-related causation.,Irritation after exposure to a luggage cart in a back-of-house the loading dock.
-OWCP-2026-1013,Maria Khan,Flagship Location,Security,Struck By Object,Elbow,High,Under Review,Keisha James,2026-05-25,2026-05-27,12400,Yes,GPT-4.1 mini,0.66,Inspect overhead rigging; concussion protocol if head involved.,Struck on the elbow by a falling a luggage cart during teardown in the casino floor.
-OWCP-2026-1014,Marcus Khan,Flagship Location Palace (Macau),Housekeeping,Chemical Exposure,Knee,Moderate,New,Daryl Yourk,2026-05-02,2026-05-03,15800,No,,,,Irritation after exposure to a pump assembly in a back-of-house a banquet ballroom.
-OWCP-2026-1015,Mei Marchetti,Flagship Location Boston Harbor,Housekeeping,Burn / Heat,Lower back,Low,Denied,Cory Lutz,2026-02-19,2026-02-21,0,Yes,GPT-4.1 mini,0.92,Document first aid; assess burn degree and surface area.,Burn on the lower back from contact with a hot a keg in the spa.
-OWCP-2026-1016,Nina Haddad,Flagship Location Palace (Macau),Food & Beverage,Chemical Exposure,Foot,Low,Under Review,Cory Lutz,2026-02-15,2026-02-18,7300,Yes,GPT-4.1 mini,0.83,Pull SDS; check ventilation; confirm work-related causation.,Irritation after exposure to a service tray in a back-of-house the casino floor.
-OWCP-2026-1017,Sofia Bennett,Flagship Location Boston Harbor,Food & Beverage,Lifting / Overexertion,Eyes / respiratory,Moderate,Under Review,Cory Lutz,2026-03-26,2026-03-29,8400,Yes,GPT-4.1 mini,0.78,Assign nurse case manager; light-duty restriction.,Strained eyes / respiratory lifting heavy a decorative panel onto a cart in a banquet ballroom.
-OWCP-2026-1018,Sofia Tanaka,Flagship Location Palace (Macau),Facilities / Engineering,Lifting / Overexertion,Ankle,Low,Approved,Alex Carter,2026-03-16,2026-03-18,8400,Yes,GPT-4.1 mini,0.63,Assign nurse case manager; light-duty restriction.,Strained ankle lifting heavy linens onto a cart in the casino floor.
-OWCP-2026-1019,Yuki Tran,Flagship Location Boston Harbor,Security,Repetitive Strain,Knee,Critical,Denied,Alex Carter,2026-03-11,2026-03-12,0,Yes,GPT-4.1 mini,0.88,Schedule ergonomic assessment; rotate task assignments.,Persistent knee pain after extended shifts in the central plant over a busy weekend.
-OWCP-2026-1020,Grace Okafor,Flagship Location Boston Harbor,Casino Floor,Burn / Heat,Lower back,Low,Approved,Alex Carter,2026-05-13,2026-05-14,21000,Yes,GPT-4.1 mini,0.96,Document first aid; assess burn degree and surface area.,Burn on the lower back from contact with a hot a keg in the loading dock.
-OWCP-2026-1021,Olivia Tanaka,Flagship Location Boston Harbor,Culinary,Burn / Heat,Left wrist,Low,Closed,Alex Carter,2026-04-25,2026-04-29,15800,Yes,GPT-4.1 mini,0.73,Document first aid; assess burn degree and surface area.,Burn on the left wrist from contact with a hot cleaning agents in a guest corridor.
-OWCP-2026-1022,James Olsen,Flagship Location Tower,Valet / Transportation,Slip / Trip / Fall,Neck,Moderate,Classified,Alex Carter,2026-03-24,2026-03-25,2200,Yes,GPT-4.1 mini,0.94,Verify wet-floor signage; order imaging for the impacted joint.,Slipped on a wet the casino floor and broke the fall with an outstretched hand.
-OWCP-2026-1023,James Delgado,Flagship Location Tower,Culinary,Burn / Heat,Shoulder,Low,Classified,Keisha James,2026-03-26,2026-03-26,12400,Yes,GPT-4.1 mini,0.69,Document first aid; assess burn degree and surface area.,Burn on the shoulder from contact with a hot linens in the porte-cochere.
-OWCP-2026-1024,Yuki Olsen,Flagship Location Palace (Macau),Culinary,Lifting / Overexertion,Knee,Moderate,Closed,Alex Carter,2026-02-05,2026-02-06,28500,Yes,GPT-4.1 mini,0.94,Assign nurse case manager; light-duty restriction.,Strained knee lifting heavy a luggage cart onto a cart in a guest corridor.
-OWCP-2026-1025,Grace Tran,Flagship Location,Valet / Transportation,Equipment / Machinery,Knee,High,Closed,Keisha James,2026-05-16,2026-05-18,12400,Yes,GPT-4.1 mini,0.79,Lock-out/tag-out review; equipment safety inspection.,knee caught in a luggage cart during maintenance in the loading dock; lacerations.
-OWCP-2026-1026,Derek Park,Flagship Location,Hotel Operations,Repetitive Strain,Ankle,Low,Classified,Alex Carter,2026-05-03,2026-05-03,6200,Yes,GPT-4.1 mini,0.8,Schedule ergonomic assessment; rotate task assignments.,Persistent ankle pain after extended shifts in the kitchen over a busy weekend.
-OWCP-2026-1027,Victor Bell,Flagship Location,Hotel Operations,Lifting / Overexertion,Shoulder,Moderate,Classified,Cory Lutz,2026-03-19,2026-03-22,21000,Yes,GPT-4.1 mini,0.73,Assign nurse case manager; light-duty restriction.,Strained shoulder lifting heavy a service tray onto a cart in a guest corridor.
-OWCP-2026-1028,James Carter,Flagship Location Boston Harbor,Security,Equipment / Machinery,Head,High,Classified,Keisha James,2026-02-22,2026-02-25,28500,Yes,GPT-4.1 mini,0.63,Lock-out/tag-out review; equipment safety inspection.,head caught in a luggage cart during maintenance in a guest corridor; lacerations.
-OWCP-2026-1029,Diego Olsen,Flagship Location Palace (Macau),Valet / Transportation,Chemical Exposure,Hip,Critical,Under Review,Daryl Yourk,2026-04-10,2026-04-12,2200,Yes,GPT-4.1 mini,0.8,Pull SDS; check ventilation; confirm work-related causation.,Irritation after exposure to linens in a back-of-house the kitchen.
-OWCP-2026-1030,Elena Nair,Flagship Location Palace (Macau),Facilities / Engineering,Chemical Exposure,Left hand,Moderate,Classified,Cory Lutz,2026-02-04,2026-02-07,6200,Yes,GPT-4.1 mini,0.8,Pull SDS; check ventilation; confirm work-related causation.,Irritation after exposure to a service tray in a back-of-house a banquet ballroom.
-OWCP-2026-1031,Fatima Olsen,Flagship Location Boston Harbor,Facilities / Engineering,Vehicle / Cart,Neck,Moderate,Closed,Cory Lutz,2026-02-11,2026-02-15,9900,Yes,GPT-4.1 mini,0.86,Review traffic pattern and right-of-way controls.,Struck by a slow-moving a keg at the the central plant.
-OWCP-2026-1032,Olivia Khan,Flagship Location Tower,Security,Lifting / Overexertion,Head,Moderate,Closed,Alex Carter,2026-05-14,2026-05-16,28500,Yes,GPT-4.1 mini,0.76,Assign nurse case manager; light-duty restriction.,Strained head lifting heavy linens onto a cart in the spa.
-OWCP-2026-1033,Noah Delgado,Flagship Location Boston Harbor,Security,Chemical Exposure,Knee,Moderate,New,Keisha James,2026-05-23,2026-05-23,3100,No,,,,Irritation after exposure to a service tray in a back-of-house the kitchen.
-OWCP-2026-1034,Yuki Cole,Flagship Location,Security,Other,Left hand,Moderate,Closed,Alex Carter,2026-04-29,2026-04-29,12400,Yes,GPT-4.1 mini,0.96,Route to adjuster for manual review - no clear pattern detected.,Reported discomfort in left hand during a shift in the loading dock; cause under review.
-OWCP-2026-1035,Yuki Okafor,Flagship Location Palace (Macau),Culinary,Other,Right wrist,Moderate,Under Review,Keisha James,2026-03-08,2026-03-12,6200,Yes,GPT-4.1 mini,0.77,Route to adjuster for manual review - no clear pattern detected.,Reported discomfort in right wrist during a shift in the casino floor; cause under review.
-OWCP-2026-1036,Aisha Bell,Flagship Location,Valet / Transportation,Burn / Heat,Ankle,Moderate,Approved,Dennis Kim,2026-05-25,2026-05-28,1800,Yes,GPT-4.1 mini,0.95,Document first aid; assess burn degree and surface area.,Burn on the ankle from contact with a hot a decorative panel in the central plant.
-OWCP-2026-1037,Derek Haddad,Flagship Location Palace (Macau),Housekeeping,Chemical Exposure,Head,Moderate,New,Cory Lutz,2026-04-29,2026-04-29,15800,No,,,,Irritation after exposure to a keg in a back-of-house the central plant.
-OWCP-2026-1038,Jamal Okafor,Flagship Location Tower,Casino Floor,Chemical Exposure,Head,Moderate,Denied,Dennis Kim,2026-04-04,2026-04-05,0,Yes,GPT-4.1 mini,0.66,Pull SDS; check ventilation; confirm work-related causation.,Irritation after exposure to cleaning agents in a back-of-house the loading dock.
-OWCP-2026-1039,Ethan Bennett,Flagship Location Tower,Valet / Transportation,Equipment / Machinery,Left hand,High,New,Daryl Yourk,2026-05-29,2026-05-31,3100,No,,,,left hand caught in a saute pan during maintenance in the spa; lacerations.
-OWCP-2026-1040,Wei Cole,Flagship Location Boston Harbor,Hotel Operations,Burn / Heat,Right wrist,Low,Approved,Cory Lutz,2026-04-12,2026-04-15,12400,Yes,GPT-4.1 mini,0.86,Document first aid; assess burn degree and surface area.,Burn on the right wrist from contact with a hot a decorative panel in the casino floor.
-OWCP-2026-1041,Mei Marchetti,Flagship Location Boston Harbor,Food & Beverage,Equipment / Machinery,Lower back,High,Under Review,Alex Carter,2026-04-22,2026-04-23,7300,Yes,GPT-4.1 mini,0.7,Lock-out/tag-out review; equipment safety inspection.,lower back caught in a decorative panel during maintenance in a banquet ballroom; lacerations.
-OWCP-2026-1042,Aisha Cole,Flagship Location Palace (Macau),Security,Repetitive Strain,Forearm,Low,Approved,Dennis Kim,2026-02-19,2026-02-20,1800,Yes,GPT-4.1 mini,0.81,Schedule ergonomic assessment; rotate task assignments.,Persistent forearm pain after extended shifts in the porte-cochere over a busy weekend.
-OWCP-2026-1043,Derek Walsh,Flagship Location,Security,Burn / Heat,Left hand,Low,Classified,Cory Lutz,2026-02-04,2026-02-04,21000,Yes,GPT-4.1 mini,0.88,Document first aid; assess burn degree and surface area.,Burn on the left hand from contact with a hot a decorative panel in the casino floor.
-OWCP-2026-1044,Mei Park,Flagship Location Tower,Security,Struck By Object,Forearm,Critical,New,Dennis Kim,2026-02-10,2026-02-14,28500,No,,,,Struck on the forearm by a falling a pump assembly during teardown in the central plant.
-OWCP-2026-1045,Diego Lin,Flagship Location,Housekeeping,Burn / Heat,Neck,Low,Closed,Dennis Kim,2026-02-24,2026-02-26,21000,Yes,GPT-4.1 mini,0.66,Document first aid; assess burn degree and surface area.,Burn on the neck from contact with a hot a luggage cart in the spa.
-OWCP-2026-1046,Yuki Khan,Flagship Location Boston Harbor,Housekeeping,Burn / Heat,Right hand,Low,Under Review,Cory Lutz,2026-05-07,2026-05-09,2200,Yes,GPT-4.1 mini,0.65,Document first aid; assess burn degree and surface area.,Burn on the right hand from contact with a hot a pump assembly in the central plant.
-OWCP-2026-1047,Ethan Carter,Flagship Location Tower,Facilities / Engineering,Slip / Trip / Fall,Forearm,Moderate,Approved,Dennis Kim,2026-05-21,2026-05-23,9900,Yes,GPT-4.1 mini,0.82,Verify wet-floor signage; order imaging for the impacted joint.,Slipped on a wet the kitchen and broke the fall with an outstretched hand.
-OWCP-2026-1048,Carlos Lin,Flagship Location Palace (Macau),Culinary,Repetitive Strain,Hip,Low,New,Daryl Yourk,2026-04-03,2026-04-06,7300,No,,,,Persistent hip pain after extended shifts in the loading dock over a busy weekend.
-OWCP-2026-1049,Mei Khan,Flagship Location,Security,Lifting / Overexertion,Elbow,Moderate,New,Dennis Kim,2026-04-22,2026-04-26,21000,No,,,,Strained elbow lifting heavy a saute pan onto a cart in the porte-cochere.
-OWCP-2026-1050,Fatima Walsh,Flagship Location Boston Harbor,Facilities / Engineering,Other,Right wrist,Moderate,Classified,Cory Lutz,2026-04-06,2026-04-06,28500,Yes,GPT-4.1 mini,0.89,Route to adjuster for manual review - no clear pattern detected.,Reported discomfort in right wrist during a shift in the loading dock; cause under review.
-OWCP-2026-1051,Fatima Reyes,Flagship Location Boston Harbor,Hotel Operations,Chemical Exposure,Lower back,Low,Closed,Cory Lutz,2026-05-07,2026-05-07,7300,Yes,GPT-4.1 mini,0.79,Pull SDS; check ventilation; confirm work-related causation.,Irritation after exposure to a saute pan in a back-of-house the casino floor.
-OWCP-2026-1052,Wei Reyes,Flagship Location Boston Harbor,Culinary,Burn / Heat,Eyes / respiratory,Low,Closed,Alex Carter,2026-05-27,2026-05-30,9900,Yes,GPT-4.1 mini,0.75,Document first aid; assess burn degree and surface area.,Burn on the eyes / respiratory from contact with a hot a service tray in a banquet ballroom.
-OWCP-2026-1053,Fatima Mendez,Flagship Location Boston Harbor,Housekeeping,Lifting / Overexertion,Right wrist,Critical,Closed,Cory Lutz,2026-05-03,2026-05-06,15800,Yes,GPT-4.1 mini,0.7,Assign nurse case manager; light-duty restriction.,Strained right wrist lifting heavy linens onto a cart in the kitchen.
-OWCP-2026-1054,Carlos Murphy,Flagship Location Boston Harbor,Valet / Transportation,Struck By Object,Ankle,High,Under Review,Cory Lutz,2026-05-07,2026-05-08,2200,Yes,GPT-4.1 mini,0.75,Inspect overhead rigging; concussion protocol if head involved.,Struck on the ankle by a falling linens during teardown in the porte-cochere.
-OWCP-2026-1055,Liam Walsh,Flagship Location Boston Harbor,Food & Beverage,Burn / Heat,Left wrist,Low,Under Review,Alex Carter,2026-02-06,2026-02-08,7300,Yes,GPT-4.1 mini,0.96,Document first aid; assess burn degree and surface area.,Burn on the left wrist from contact with a hot linens in a banquet ballroom.
-OWCP-2026-1056,Victor Tran,Flagship Location,Security,Slip / Trip / Fall,Lower back,Moderate,Under Review,Alex Carter,2026-04-07,2026-04-08,3100,Yes,GPT-4.1 mini,0.91,Verify wet-floor signage; order imaging for the impacted joint.,Slipped on a wet the casino floor and broke the fall with an outstretched hand.
-OWCP-2026-1057,Marcus Khan,Flagship Location Tower,Hotel Operations,Chemical Exposure,Foot,Low,New,Cory Lutz,2026-02-26,2026-02-26,9900,No,,,,Irritation after exposure to cleaning agents in a back-of-house a guest corridor.
-OWCP-2026-1058,Derek Okafor,Flagship Location,Culinary,Other,Forearm,Moderate,Under Review,Dennis Kim,2026-05-25,2026-05-29,15800,Yes,GPT-4.1 mini,0.69,Route to adjuster for manual review - no clear pattern detected.,Reported discomfort in forearm during a shift in the kitchen; cause under review.
-OWCP-2026-1059,Carlos Walsh,Flagship Location Tower,Casino Floor,Vehicle / Cart,Foot,High,Under Review,Dennis Kim,2026-03-28,2026-03-28,4500,Yes,GPT-4.1 mini,0.93,Review traffic pattern and right-of-way controls.,Struck by a slow-moving a saute pan at the the porte-cochere.
-OWCP-2026-1060,Grace Khan,Flagship Location Palace (Macau),Food & Beverage,Equipment / Machinery,Right hand,High,Closed,Daryl Yourk,2026-02-07,2026-02-11,1800,Yes,GPT-4.1 mini,0.74,Lock-out/tag-out review; equipment safety inspection.,right hand caught in a decorative panel during maintenance in the spa; lacerations.
+ClaimNumber,Claimant,Region,Department,IncidentType,BodyPart,Severity,Status,Adjuster,DateOfInjury,DateReported,ReserveUsd,Classified,ClassifierModel,ClassifierConfidence,RecommendedAction,Description
+OWCP-2026-1001,Jamal Bennett,East Coast,Food & Beverage,Repetitive Strain,Shoulder,Low,Closed,Bob Smith,2026-05-18,2026-05-19,28500,Yes,GPT-4.1 mini,0.85,Schedule ergonomic assessment; rotate task assignments.,Persistent shoulder pain after extended shifts in the porte-cochere over a busy weekend.
+OWCP-2026-1002,Grace Bell,EMEA,Culinary,Chemical Exposure,Ankle,Moderate,Under Review,Anton Clipeus,2026-02-21,2026-02-23,7300,Yes,GPT-4.1 mini,0.81,Pull SDS; check ventilation; confirm work-related causation.,Irritation after exposure to a luggage cart in a back-of-house the loading dock.
+OWCP-2026-1003,Olivia Murphy,EMEA,Casino Floor,Repetitive Strain,Right wrist,Low,Closed,Darbot Timelarp,2026-05-30,2026-05-31,3100,Yes,GPT-4.1 mini,0.93,Schedule ergonomic assessment; rotate task assignments.,Persistent right wrist pain after extended shifts in a guest corridor over a busy weekend.
+OWCP-2026-1004,Wei Zhang,Pacific,Housekeeping,Burn / Heat,Eyes / respiratory,Low,Under Review,Bob Smith,2026-02-26,2026-02-26,6200,Yes,GPT-4.1 mini,0.84,Document first aid; assess burn degree and surface area.,Burn on the eyes / respiratory from contact with a hot a saute pan in the kitchen.
+OWCP-2026-1005,Wei Zhang,Pacific,Housekeeping,Repetitive Strain,Left wrist,High,Approved,Darbot Timelarp,2026-03-20,2026-03-21,21000,Yes,GPT-4.1 mini,0.84,Schedule ergonomic assessment; rotate task assignments.,Persistent left wrist pain after extended shifts in the central plant over a busy weekend.
+OWCP-2026-1006,Liam Silva,East Coast,Hotel Operations,Slip / Trip / Fall,Ankle,Moderate,Classified,Anton Clipeus,2026-04-20,2026-04-21,6200,Yes,GPT-4.1 mini,0.74,Verify wet-floor signage; order imaging for the impacted joint.,Slipped on a wet a guest corridor and broke the fall with an outstretched hand.
+OWCP-2026-1007,Sofia Tran,East Coast,Security,Other,Ankle,Moderate,Approved,Anton Clipeus,2026-05-06,2026-05-10,2200,Yes,GPT-4.1 mini,0.78,Route to adjuster for manual review - no clear pattern detected.,Reported discomfort in ankle during a shift in a guest corridor; cause under review.
+OWCP-2026-1008,Mei Russo,East Coast,Facilities / Engineering,Burn / Heat,Left wrist,Critical,New,Anton Clipeus,2026-03-28,2026-03-31,1800,No,,,,Burn on the left wrist from contact with a hot a keg in the kitchen.
+OWCP-2026-1009,Derek Delgado,ROW,Valet / Transportation,Other,Shoulder,Moderate,Under Review,Anton Clipeus,2026-05-24,2026-05-27,15800,Yes,GPT-4.1 mini,0.7,Route to adjuster for manual review - no clear pattern detected.,Reported discomfort in shoulder during a shift in the central plant; cause under review.
+OWCP-2026-1010,Maria Petrov,Pacific,Valet / Transportation,Other,Knee,Moderate,Under Review,Bob Smith,2026-02-26,2026-03-01,1800,Yes,GPT-4.1 mini,0.89,Route to adjuster for manual review - no clear pattern detected.,Reported discomfort in knee during a shift in the porte-cochere; cause under review.
+OWCP-2026-1011,Carlos Silva,EMEA,Security,Chemical Exposure,Shoulder,Moderate,Under Review,Darbot Timelarp,2026-02-25,2026-02-26,15800,Yes,GPT-4.1 mini,0.7,Pull SDS; check ventilation; confirm work-related causation.,Irritation after exposure to a keg in a back-of-house the spa.
+OWCP-2026-1012,Fatima Cole,East Coast,Housekeeping,Chemical Exposure,Knee,Moderate,Under Review,Anton Clipeus,2026-02-10,2026-02-12,21000,Yes,GPT-4.1 mini,0.85,Pull SDS; check ventilation; confirm work-related causation.,Irritation after exposure to a luggage cart in a back-of-house the loading dock.
+OWCP-2026-1013,Maria Khan,Pacific,Security,Struck By Object,Elbow,High,Under Review,Ashley Samstone,2026-05-25,2026-05-27,12400,Yes,GPT-4.1 mini,0.66,Inspect overhead rigging; concussion protocol if head involved.,Struck on the elbow by a falling a luggage cart during teardown in the casino floor.
+OWCP-2026-1014,Marcus Khan,ROW,Housekeeping,Chemical Exposure,Knee,Moderate,New,Darbot Timelarp,2026-05-02,2026-05-03,15800,No,,,,Irritation after exposure to a pump assembly in a back-of-house a banquet ballroom.
+OWCP-2026-1015,Mei Marchetti,East Coast,Housekeeping,Burn / Heat,Lower back,Low,Denied,Bob Smith,2026-02-19,2026-02-21,0,Yes,GPT-4.1 mini,0.92,Document first aid; assess burn degree and surface area.,Burn on the lower back from contact with a hot a keg in the spa.
+OWCP-2026-1016,Nina Haddad,ROW,Food & Beverage,Chemical Exposure,Foot,Low,Under Review,Bob Smith,2026-02-15,2026-02-18,7300,Yes,GPT-4.1 mini,0.83,Pull SDS; check ventilation; confirm work-related causation.,Irritation after exposure to a service tray in a back-of-house the casino floor.
+OWCP-2026-1017,Sofia Bennett,East Coast,Food & Beverage,Lifting / Overexertion,Eyes / respiratory,Moderate,Under Review,Bob Smith,2026-03-26,2026-03-29,8400,Yes,GPT-4.1 mini,0.78,Assign nurse case manager; light-duty restriction.,Strained eyes / respiratory lifting heavy a decorative panel onto a cart in a banquet ballroom.
+OWCP-2026-1018,Sofia Tanaka,ROW,Facilities / Engineering,Lifting / Overexertion,Ankle,Low,Approved,Alan Spector,2026-03-16,2026-03-18,8400,Yes,GPT-4.1 mini,0.63,Assign nurse case manager; light-duty restriction.,Strained ankle lifting heavy linens onto a cart in the casino floor.
+OWCP-2026-1019,Yuki Tran,East Coast,Security,Repetitive Strain,Knee,Critical,Denied,Alan Spector,2026-03-11,2026-03-12,0,Yes,GPT-4.1 mini,0.88,Schedule ergonomic assessment; rotate task assignments.,Persistent knee pain after extended shifts in the central plant over a busy weekend.
+OWCP-2026-1020,Grace Okafor,East Coast,Casino Floor,Burn / Heat,Lower back,Low,Approved,Alan Spector,2026-05-13,2026-05-14,21000,Yes,GPT-4.1 mini,0.96,Document first aid; assess burn degree and surface area.,Burn on the lower back from contact with a hot a keg in the loading dock.
+OWCP-2026-1021,Olivia Tanaka,East Coast,Culinary,Burn / Heat,Left wrist,Low,Closed,Alan Spector,2026-04-25,2026-04-29,15800,Yes,GPT-4.1 mini,0.73,Document first aid; assess burn degree and surface area.,Burn on the left wrist from contact with a hot cleaning agents in a guest corridor.
+OWCP-2026-1022,James Olsen,EMEA,Valet / Transportation,Slip / Trip / Fall,Neck,Moderate,Classified,Alan Spector,2026-03-24,2026-03-25,2200,Yes,GPT-4.1 mini,0.94,Verify wet-floor signage; order imaging for the impacted joint.,Slipped on a wet the casino floor and broke the fall with an outstretched hand.
+OWCP-2026-1023,James Delgado,EMEA,Culinary,Burn / Heat,Shoulder,Low,Classified,Ashley Samstone,2026-03-26,2026-03-26,12400,Yes,GPT-4.1 mini,0.69,Document first aid; assess burn degree and surface area.,Burn on the shoulder from contact with a hot linens in the porte-cochere.
+OWCP-2026-1024,Yuki Olsen,ROW,Culinary,Lifting / Overexertion,Knee,Moderate,Closed,Alan Spector,2026-02-05,2026-02-06,28500,Yes,GPT-4.1 mini,0.94,Assign nurse case manager; light-duty restriction.,Strained knee lifting heavy a luggage cart onto a cart in a guest corridor.
+OWCP-2026-1025,Grace Tran,Pacific,Valet / Transportation,Equipment / Machinery,Knee,High,Closed,Ashley Samstone,2026-05-16,2026-05-18,12400,Yes,GPT-4.1 mini,0.79,Lock-out/tag-out review; equipment safety inspection.,knee caught in a luggage cart during maintenance in the loading dock; lacerations.
+OWCP-2026-1026,Derek Park,Pacific,Hotel Operations,Repetitive Strain,Ankle,Low,Classified,Alan Spector,2026-05-03,2026-05-03,6200,Yes,GPT-4.1 mini,0.8,Schedule ergonomic assessment; rotate task assignments.,Persistent ankle pain after extended shifts in the kitchen over a busy weekend.
+OWCP-2026-1027,Victor Bell,Pacific,Hotel Operations,Lifting / Overexertion,Shoulder,Moderate,Classified,Bob Smith,2026-03-19,2026-03-22,21000,Yes,GPT-4.1 mini,0.73,Assign nurse case manager; light-duty restriction.,Strained shoulder lifting heavy a service tray onto a cart in a guest corridor.
+OWCP-2026-1028,James Carter,East Coast,Security,Equipment / Machinery,Head,High,Classified,Ashley Samstone,2026-02-22,2026-02-25,28500,Yes,GPT-4.1 mini,0.63,Lock-out/tag-out review; equipment safety inspection.,head caught in a luggage cart during maintenance in a guest corridor; lacerations.
+OWCP-2026-1029,Diego Olsen,ROW,Valet / Transportation,Chemical Exposure,Hip,Critical,Under Review,Darbot Timelarp,2026-04-10,2026-04-12,2200,Yes,GPT-4.1 mini,0.8,Pull SDS; check ventilation; confirm work-related causation.,Irritation after exposure to linens in a back-of-house the kitchen.
+OWCP-2026-1030,Elena Nair,ROW,Facilities / Engineering,Chemical Exposure,Left hand,Moderate,Classified,Bob Smith,2026-02-04,2026-02-07,6200,Yes,GPT-4.1 mini,0.8,Pull SDS; check ventilation; confirm work-related causation.,Irritation after exposure to a service tray in a back-of-house a banquet ballroom.
+OWCP-2026-1031,Fatima Olsen,East Coast,Facilities / Engineering,Vehicle / Cart,Neck,Moderate,Closed,Bob Smith,2026-02-11,2026-02-15,9900,Yes,GPT-4.1 mini,0.86,Review traffic pattern and right-of-way controls.,Struck by a slow-moving a keg at the the central plant.
+OWCP-2026-1032,Olivia Khan,EMEA,Security,Lifting / Overexertion,Head,Moderate,Closed,Alan Spector,2026-05-14,2026-05-16,28500,Yes,GPT-4.1 mini,0.76,Assign nurse case manager; light-duty restriction.,Strained head lifting heavy linens onto a cart in the spa.
+OWCP-2026-1033,Noah Delgado,East Coast,Security,Chemical Exposure,Knee,Moderate,New,Ashley Samstone,2026-05-23,2026-05-23,3100,No,,,,Irritation after exposure to a service tray in a back-of-house the kitchen.
+OWCP-2026-1034,Yuki Cole,Pacific,Security,Other,Left hand,Moderate,Closed,Alan Spector,2026-04-29,2026-04-29,12400,Yes,GPT-4.1 mini,0.96,Route to adjuster for manual review - no clear pattern detected.,Reported discomfort in left hand during a shift in the loading dock; cause under review.
+OWCP-2026-1035,Yuki Okafor,ROW,Culinary,Other,Right wrist,Moderate,Under Review,Ashley Samstone,2026-03-08,2026-03-12,6200,Yes,GPT-4.1 mini,0.77,Route to adjuster for manual review - no clear pattern detected.,Reported discomfort in right wrist during a shift in the casino floor; cause under review.
+OWCP-2026-1036,Aisha Bell,Pacific,Valet / Transportation,Burn / Heat,Ankle,Moderate,Approved,Anton Clipeus,2026-05-25,2026-05-28,1800,Yes,GPT-4.1 mini,0.95,Document first aid; assess burn degree and surface area.,Burn on the ankle from contact with a hot a decorative panel in the central plant.
+OWCP-2026-1037,Derek Haddad,ROW,Housekeeping,Chemical Exposure,Head,Moderate,New,Bob Smith,2026-04-29,2026-04-29,15800,No,,,,Irritation after exposure to a keg in a back-of-house the central plant.
+OWCP-2026-1038,Jamal Okafor,EMEA,Casino Floor,Chemical Exposure,Head,Moderate,Denied,Anton Clipeus,2026-04-04,2026-04-05,0,Yes,GPT-4.1 mini,0.66,Pull SDS; check ventilation; confirm work-related causation.,Irritation after exposure to cleaning agents in a back-of-house the loading dock.
+OWCP-2026-1039,Ethan Bennett,EMEA,Valet / Transportation,Equipment / Machinery,Left hand,High,New,Darbot Timelarp,2026-05-29,2026-05-31,3100,No,,,,left hand caught in a saute pan during maintenance in the spa; lacerations.
+OWCP-2026-1040,Wei Cole,East Coast,Hotel Operations,Burn / Heat,Right wrist,Low,Approved,Bob Smith,2026-04-12,2026-04-15,12400,Yes,GPT-4.1 mini,0.86,Document first aid; assess burn degree and surface area.,Burn on the right wrist from contact with a hot a decorative panel in the casino floor.
+OWCP-2026-1041,Mei Marchetti,East Coast,Food & Beverage,Equipment / Machinery,Lower back,High,Under Review,Alan Spector,2026-04-22,2026-04-23,7300,Yes,GPT-4.1 mini,0.7,Lock-out/tag-out review; equipment safety inspection.,lower back caught in a decorative panel during maintenance in a banquet ballroom; lacerations.
+OWCP-2026-1042,Aisha Cole,ROW,Security,Repetitive Strain,Forearm,Low,Approved,Anton Clipeus,2026-02-19,2026-02-20,1800,Yes,GPT-4.1 mini,0.81,Schedule ergonomic assessment; rotate task assignments.,Persistent forearm pain after extended shifts in the porte-cochere over a busy weekend.
+OWCP-2026-1043,Derek Walsh,Pacific,Security,Burn / Heat,Left hand,Low,Classified,Bob Smith,2026-02-04,2026-02-04,21000,Yes,GPT-4.1 mini,0.88,Document first aid; assess burn degree and surface area.,Burn on the left hand from contact with a hot a decorative panel in the casino floor.
+OWCP-2026-1044,Mei Park,EMEA,Security,Struck By Object,Forearm,Critical,New,Anton Clipeus,2026-02-10,2026-02-14,28500,No,,,,Struck on the forearm by a falling a pump assembly during teardown in the central plant.
+OWCP-2026-1045,Diego Lin,Pacific,Housekeeping,Burn / Heat,Neck,Low,Closed,Anton Clipeus,2026-02-24,2026-02-26,21000,Yes,GPT-4.1 mini,0.66,Document first aid; assess burn degree and surface area.,Burn on the neck from contact with a hot a luggage cart in the spa.
+OWCP-2026-1046,Yuki Khan,East Coast,Housekeeping,Burn / Heat,Right hand,Low,Under Review,Bob Smith,2026-05-07,2026-05-09,2200,Yes,GPT-4.1 mini,0.65,Document first aid; assess burn degree and surface area.,Burn on the right hand from contact with a hot a pump assembly in the central plant.
+OWCP-2026-1047,Ethan Carter,EMEA,Facilities / Engineering,Slip / Trip / Fall,Forearm,Moderate,Approved,Anton Clipeus,2026-05-21,2026-05-23,9900,Yes,GPT-4.1 mini,0.82,Verify wet-floor signage; order imaging for the impacted joint.,Slipped on a wet the kitchen and broke the fall with an outstretched hand.
+OWCP-2026-1048,Carlos Lin,ROW,Culinary,Repetitive Strain,Hip,Low,New,Darbot Timelarp,2026-04-03,2026-04-06,7300,No,,,,Persistent hip pain after extended shifts in the loading dock over a busy weekend.
+OWCP-2026-1049,Mei Khan,Pacific,Security,Lifting / Overexertion,Elbow,Moderate,New,Anton Clipeus,2026-04-22,2026-04-26,21000,No,,,,Strained elbow lifting heavy a saute pan onto a cart in the porte-cochere.
+OWCP-2026-1050,Fatima Walsh,East Coast,Facilities / Engineering,Other,Right wrist,Moderate,Classified,Bob Smith,2026-04-06,2026-04-06,28500,Yes,GPT-4.1 mini,0.89,Route to adjuster for manual review - no clear pattern detected.,Reported discomfort in right wrist during a shift in the loading dock; cause under review.
+OWCP-2026-1051,Fatima Reyes,East Coast,Hotel Operations,Chemical Exposure,Lower back,Low,Closed,Bob Smith,2026-05-07,2026-05-07,7300,Yes,GPT-4.1 mini,0.79,Pull SDS; check ventilation; confirm work-related causation.,Irritation after exposure to a saute pan in a back-of-house the casino floor.
+OWCP-2026-1052,Wei Reyes,East Coast,Culinary,Burn / Heat,Eyes / respiratory,Low,Closed,Alan Spector,2026-05-27,2026-05-30,9900,Yes,GPT-4.1 mini,0.75,Document first aid; assess burn degree and surface area.,Burn on the eyes / respiratory from contact with a hot a service tray in a banquet ballroom.
+OWCP-2026-1053,Fatima Mendez,East Coast,Housekeeping,Lifting / Overexertion,Right wrist,Critical,Closed,Bob Smith,2026-05-03,2026-05-06,15800,Yes,GPT-4.1 mini,0.7,Assign nurse case manager; light-duty restriction.,Strained right wrist lifting heavy linens onto a cart in the kitchen.
+OWCP-2026-1054,Carlos Murphy,East Coast,Valet / Transportation,Struck By Object,Ankle,High,Under Review,Bob Smith,2026-05-07,2026-05-08,2200,Yes,GPT-4.1 mini,0.75,Inspect overhead rigging; concussion protocol if head involved.,Struck on the ankle by a falling linens during teardown in the porte-cochere.
+OWCP-2026-1055,Liam Walsh,East Coast,Food & Beverage,Burn / Heat,Left wrist,Low,Under Review,Alan Spector,2026-02-06,2026-02-08,7300,Yes,GPT-4.1 mini,0.96,Document first aid; assess burn degree and surface area.,Burn on the left wrist from contact with a hot linens in a banquet ballroom.
+OWCP-2026-1056,Victor Tran,Pacific,Security,Slip / Trip / Fall,Lower back,Moderate,Under Review,Alan Spector,2026-04-07,2026-04-08,3100,Yes,GPT-4.1 mini,0.91,Verify wet-floor signage; order imaging for the impacted joint.,Slipped on a wet the casino floor and broke the fall with an outstretched hand.
+OWCP-2026-1057,Marcus Khan,EMEA,Hotel Operations,Chemical Exposure,Foot,Low,New,Bob Smith,2026-02-26,2026-02-26,9900,No,,,,Irritation after exposure to cleaning agents in a back-of-house a guest corridor.
+OWCP-2026-1058,Derek Okafor,Pacific,Culinary,Other,Forearm,Moderate,Under Review,Anton Clipeus,2026-05-25,2026-05-29,15800,Yes,GPT-4.1 mini,0.69,Route to adjuster for manual review - no clear pattern detected.,Reported discomfort in forearm during a shift in the kitchen; cause under review.
+OWCP-2026-1059,Carlos Walsh,EMEA,Casino Floor,Vehicle / Cart,Foot,High,Under Review,Anton Clipeus,2026-03-28,2026-03-28,4500,Yes,GPT-4.1 mini,0.93,Review traffic pattern and right-of-way controls.,Struck by a slow-moving a saute pan at the the porte-cochere.
+OWCP-2026-1060,Grace Khan,ROW,Food & Beverage,Equipment / Machinery,Right hand,High,Closed,Darbot Timelarp,2026-02-07,2026-02-11,1800,Yes,GPT-4.1 mini,0.74,Lock-out/tag-out review; equipment safety inspection.,right hand caught in a decorative panel during maintenance in the spa; lacerations.
 
 ### REPORT_INCIDENT :: Form Fields
 Field,Type,Required,Source,Notes
 Claimant Name,text,Yes,manual,Full name of injured employee
 Date of Injury,date,Yes,manual,Cannot be in the future
-Property,choice,Yes,PROPERTIES list,4 properties
+Region,choice,Yes,REGIONS list,4 regions
 Department,choice,Yes,DEPARTMENTS list,8 operational departments
 Body Part Affected,text,No,manual,Defaults to 'Unspecified'
 Assigned Adjuster,choice,Yes,ADJUSTERS list,Routed by workload
@@ -153,10 +153,10 @@ Claim Number,derived,Auto,sequence,OWCP-<year>-<n>
 
 ### REPORT_INCIDENT :: Choice Options
 OptionSet,Value
-Property,Flagship Location
-Property,Flagship Location Tower
-Property,Flagship Location Palace (Macau)
-Property,Flagship Location Boston Harbor
+Region,Pacific
+Region,EMEA
+Region,ROW
+Region,East Coast
 Department,Housekeeping
 Department,Food & Beverage
 Department,Casino Floor
@@ -165,11 +165,11 @@ Department,Security
 Department,Hotel Operations
 Department,Culinary
 Department,Valet / Transportation
-Adjuster,Alex Carter
-Adjuster,Cory Lutz
-Adjuster,Keisha James
-Adjuster,Dennis Kim
-Adjuster,Daryl Yourk
+Adjuster,Alan Spector
+Adjuster,Bob Smith
+Adjuster,Ashley Samstone
+Adjuster,Anton Clipeus
+Adjuster,Darbot Timelarp
 
 ### REPORT_INCIDENT :: Intake Workflow Steps
 Step,Action,Owner

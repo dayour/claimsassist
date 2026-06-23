@@ -1,6 +1,6 @@
 // Generates a one-page PDF summary of a claim using jsPDF and returns the
-// content as raw base64 (no data: prefix), ready to attach to an Outlook email
-// via the Office 365 connector (SendEmailV2 ContentBytes).
+// content as raw base64 (no data: prefix), ready for Dataverse annotations
+// via Dataverse custom action payloads and annotation attachments.
 
 import { jsPDF } from "jspdf";
 import type { Claim } from "../data/seed";
@@ -76,7 +76,7 @@ export function generateClaimPdf(c: Claim): ClaimPdf {
   twoCol("Severity", c.severity, "Assigned Adjuster", c.adjuster);
 
   sectionTitle("Incident Details");
-  twoCol("Property", c.property, "Department", c.department);
+  twoCol("Region", c.region, "Department", c.department);
   twoCol("Incident Type", c.incidentType, "Body Part", c.bodyPart);
   twoCol("Date of Injury", c.dateOfInjury, "Date Reported", c.dateReported);
   twoCol("Reserve (USD)", money(c.reserveUsd), "", "");

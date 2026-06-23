@@ -1,6 +1,6 @@
 // Seed data for Claim_Studio — Workers' Comp Claims Tracker.
-// Seeded from the OWCP capture (Flagship Location "Workers Comp Claims Tracker"
-// working session) — participants, properties, and the Copilot Studio
+// Seeded from the OWCP capture (Workers Comp Claims Tracker
+// working session) — participants, regions, and the Copilot Studio
 // incident-classifier concept inform this sample dataset.
 
 export type ClaimStatus =
@@ -37,7 +37,7 @@ export interface Claim {
   id: string;
   claimNumber: string;
   claimant: string;
-  property: string;
+  region: string;
   department: string;
   dateOfInjury: string; // ISO date
   dateReported: string; // ISO date
@@ -58,17 +58,17 @@ export interface Claim {
 export interface ClaimsFilter {
   q?: string;
   status?: ClaimStatus;
-  property?: string;
+  region?: string;
   incidentType?: IncidentType;
   openActive?: boolean;
   classifiedOnly?: boolean;
 }
 
-export const PROPERTIES = [
-  "Flagship Location",
-  "Flagship Location Tower",
-  "Flagship Location Palace (Macau)",
-  "Flagship Location Boston Harbor",
+export const REGIONS = [
+  "Pacific",
+  "East Coast",
+  "EMEA",
+  "ROW",
 ] as const;
 
 export const DEPARTMENTS = [
@@ -83,11 +83,11 @@ export const DEPARTMENTS = [
 ] as const;
 
 export const ADJUSTERS = [
-  "Alex Carter",
-  "Cory Lutz",
-  "Keisha James",
-  "Dennis Kim",
-  "Daryl Yourk",
+  "Alan Spector",
+  "Bob Smith",
+  "Ashley Samstone",
+  "Anton Clipeus",
+  "Darbot Timelarp",
 ] as const;
 
 export const INCIDENT_TYPES: IncidentType[] = [
@@ -186,7 +186,7 @@ export const claims: Claim[] = [
     id: "c-1001",
     claimNumber: "OWCP-2026-1001",
     claimant: "Maria Delgado",
-    property: "Flagship Location",
+    region: "Pacific",
     department: "Housekeeping",
     dateOfInjury: "2026-05-12",
     dateReported: "2026-05-12",
@@ -194,7 +194,7 @@ export const claims: Claim[] = [
     bodyPart: "Lower back",
     status: "Approved",
     severity: "Moderate",
-    adjuster: "Alex Carter",
+    adjuster: "Alan Spector",
     reserveUsd: 8400,
     description:
       "Strained lower back lifting a stack of wet linens onto a housekeeping cart on the 22nd floor.",
@@ -212,7 +212,7 @@ export const claims: Claim[] = [
     id: "c-1002",
     claimNumber: "OWCP-2026-1002",
     claimant: "Anthony Russo",
-    property: "Flagship Location Tower",
+    region: "EMEA",
     department: "Food & Beverage",
     dateOfInjury: "2026-05-18",
     dateReported: "2026-05-19",
@@ -220,7 +220,7 @@ export const claims: Claim[] = [
     bodyPart: "Right wrist",
     status: "Under Review",
     severity: "Moderate",
-    adjuster: "Cory Lutz",
+    adjuster: "Bob Smith",
     reserveUsd: 6200,
     description:
       "Slipped on a wet kitchen floor near the dish pit; broke fall with right hand. Possible wrist sprain.",
@@ -238,7 +238,7 @@ export const claims: Claim[] = [
     id: "c-1003",
     claimNumber: "OWCP-2026-1003",
     claimant: "Priya Nair",
-    property: "Flagship Location",
+    region: "Pacific",
     department: "Casino Floor",
     dateOfInjury: "2026-05-22",
     dateReported: "2026-05-22",
@@ -246,7 +246,7 @@ export const claims: Claim[] = [
     bodyPart: "Shoulder",
     status: "Classified",
     severity: "Low",
-    adjuster: "Keisha James",
+    adjuster: "Ashley Samstone",
     reserveUsd: 3100,
     description:
       "Dealer reporting persistent right shoulder pain after extended table-game shifts during a busy weekend.",
@@ -264,7 +264,7 @@ export const claims: Claim[] = [
     id: "c-1004",
     claimNumber: "OWCP-2026-1004",
     claimant: "Marcus Bell",
-    property: "Flagship Location Boston Harbor",
+    region: "East Coast",
     department: "Facilities / Engineering",
     dateOfInjury: "2026-05-24",
     dateReported: "2026-05-26",
@@ -272,7 +272,7 @@ export const claims: Claim[] = [
     bodyPart: "Left hand",
     status: "New",
     severity: "High",
-    adjuster: "Dennis Kim",
+    adjuster: "Anton Clipeus",
     reserveUsd: 15800,
     description:
       "Hand caught between a pump housing and bracket during preventative maintenance in the central plant. Lacerations to two fingers.",
@@ -281,7 +281,7 @@ export const claims: Claim[] = [
     id: "c-1005",
     claimNumber: "OWCP-2026-1005",
     claimant: "Sofia Marchetti",
-    property: "Flagship Location Palace (Macau)",
+    region: "ROW",
     department: "Hotel Operations",
     dateOfInjury: "2026-05-27",
     dateReported: "2026-05-28",
@@ -289,7 +289,7 @@ export const claims: Claim[] = [
     bodyPart: "Head",
     status: "New",
     severity: "High",
-    adjuster: "Alex Carter",
+    adjuster: "Alan Spector",
     reserveUsd: 12400,
     description:
       "Struck on the head by a falling decorative panel in a banquet ballroom during event teardown.",
@@ -298,7 +298,7 @@ export const claims: Claim[] = [
     id: "c-1006",
     claimNumber: "OWCP-2026-1006",
     claimant: "Derek Olsen",
-    property: "Flagship Location",
+    region: "Pacific",
     department: "Valet / Transportation",
     dateOfInjury: "2026-05-29",
     dateReported: "2026-05-29",
@@ -306,7 +306,7 @@ export const claims: Claim[] = [
     bodyPart: "Knee",
     status: "Under Review",
     severity: "Moderate",
-    adjuster: "Cory Lutz",
+    adjuster: "Bob Smith",
     reserveUsd: 7300,
     description:
       "Valet struck below the knee by a slow-moving luggage cart at the porte-cochère.",
@@ -323,7 +323,7 @@ export const claims: Claim[] = [
     id: "c-1007",
     claimNumber: "OWCP-2026-1007",
     claimant: "Hannah Cole",
-    property: "Flagship Location Tower",
+    region: "EMEA",
     department: "Culinary",
     dateOfInjury: "2026-04-30",
     dateReported: "2026-04-30",
@@ -331,7 +331,7 @@ export const claims: Claim[] = [
     bodyPart: "Forearm",
     status: "Closed",
     severity: "Low",
-    adjuster: "Keisha James",
+    adjuster: "Ashley Samstone",
     reserveUsd: 2200,
     description:
       "Minor second-degree burn on forearm from contact with a hot sauté pan handle on the line.",
@@ -348,7 +348,7 @@ export const claims: Claim[] = [
     id: "c-1008",
     claimNumber: "OWCP-2026-1008",
     claimant: "Victor Tran",
-    property: "Flagship Location",
+    region: "Pacific",
     department: "Security",
     dateOfInjury: "2026-05-03",
     dateReported: "2026-05-04",
@@ -356,7 +356,7 @@ export const claims: Claim[] = [
     bodyPart: "Eyes / respiratory",
     status: "Denied",
     severity: "Moderate",
-    adjuster: "Dennis Kim",
+    adjuster: "Anton Clipeus",
     reserveUsd: 0,
     description:
       "Officer reported irritation after exposure to cleaning agents in a back-of-house corridor; investigation found no work-related causation.",
@@ -375,11 +375,11 @@ export const claims: Claim[] = [
 // Reference to the source capture that seeded this app.
 export const CAPTURE = {
   source: "Screen Recording 2026-05-29 100241.mp4",
-  session: "Flagship Location | Weekly Working Session",
+  session: "Claim_Studio | Weekly Working Session",
   durationLabel: "22:56",
   frameCount: 33,
   engine: "Yumlog Paperboy half-step bisection",
-  environment: "Legal Dev Environment · Flagship Location",
+  environment: "Legal Dev Environment · Claim_Studio",
   built: "Workers Comp Claims Tracker (Power Apps) + Copilot Studio incident classifier",
   viewerPath: "../yumlog-capture-app/index.html",
 };
